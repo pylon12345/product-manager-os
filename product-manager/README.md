@@ -230,3 +230,7 @@ python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" --sources
 ## 版本与定版说明
 
 详见 `UPGRADE_NOTES.md`。
+
+## 开源许可
+
+本 Skill 以 [Apache License 2.0](LICENSE) 开源。公开仓库仅提供代码、模板和方法资料；运行时抓取的网页全文及本地知识库备份不属于发行包。
