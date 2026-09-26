@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "nng-articles",
+      "title": "Nielsen Norman Group Articles",
+      "url": "https://www.nngroup.com/articles/",
+      "topic": "user_research",
+      "enabled": true
+    },
+    {
+      "id": "strategyzer-library",
+      "title": "Strategyzer Library",
+      "url": "https://www.strategyzer.com/library",
+      "topic": "business_model",
+      "enabled": true
+    },
+    {
+      "id": "stripe-pricing-models",
+      "title": "Stripe Recurring Pricing Models",
+      "url": "https://docs.stripe.com/products-prices/pricing-models",
+      "topic": "pricing",
+      "enabled": true
+    },
+    {
+      "id": "openai-evaluation-best-practices",
+      "title": "OpenAI Evaluation Best Practices",
+      "url": "https://developers.openai.com/api/docs/guides/evaluation-best-practices",
+      "topic": "ai_eval",
+      "enabled": true
+    },
+    {
+      "id": "openai-cost-optimization",
+      "title": "OpenAI Cost Optimization",
+      "url": "https://developers.openai.com/api/docs/guides/cost-optimization",
+      "topic": "ai_cost",
+      "enabled": true
+    },
+    {
+      "id": "openai-api-pricing",
+      "title": "OpenAI API Pricing",
+      "url": "https://developers.openai.com/api/docs/pricing",
+      "topic": "ai_cost",
+      "enabled": true
+    },
+    {
+      "id": "nist-ai-rmf",
+      "title": "NIST AI Risk Management Framework",
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "topic": "ai_governance",
+      "enabled": true
+    },
+    {
+      "id": "stanford-hai-ai-index",
+      "title": "Stanford HAI AI Index",
+      "url": "https://hai.stanford.edu/ai-index",
+      "topic": "ai_trends",
+      "enabled": true
+    }
+  ]
+}

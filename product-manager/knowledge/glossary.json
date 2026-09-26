@@ -1,0 +1,904 @@
+[
+  {
+    "id": 1,
+    "term": "PM（Product Manager）",
+    "category": "产品基础",
+    "definition": "产品经理。负责判断做什么、为什么做、先做什么，并推动结果落地。",
+    "when_to_use": "当你需要明确产品责任边界、定义产品目标或推动跨团队协作时使用。",
+    "usage_rule": "当你需要明确产品责任边界、定义产品目标或推动跨团队协作时使用。",
+    "aliases": [
+      "PM"
+    ]
+  },
+  {
+    "id": 2,
+    "term": "Product",
+    "category": "产品基础",
+    "definition": "能够持续为一类用户解决特定问题并创造价值的解决方案，不一定是 App。",
+    "when_to_use": "定义一个产品时，优先描述它解决的问题和用户价值，而不是功能清单。",
+    "usage_rule": "定义一个产品时，优先描述它解决的问题和用户价值，而不是功能清单。",
+    "aliases": []
+  },
+  {
+    "id": 3,
+    "term": "User",
+    "category": "产品基础",
+    "definition": "实际使用产品的人。",
+    "when_to_use": "做需求分析时先明确谁在使用，以及他在什么场景下使用。",
+    "usage_rule": "做需求分析时先明确谁在使用，以及他在什么场景下使用。",
+    "aliases": []
+  },
+  {
+    "id": 4,
+    "term": "Customer",
+    "category": "产品基础",
+    "definition": "购买、付费或做采购决策的人，可能与实际用户不同。",
+    "when_to_use": "B端产品尤其要区分使用者、决策者和付款者。",
+    "usage_rule": "B端产品尤其要区分使用者、决策者和付款者。",
+    "aliases": []
+  },
+  {
+    "id": 5,
+    "term": "B端 / B2B",
+    "category": "产品基础",
+    "definition": "面向企业或组织提供产品和服务。",
+    "when_to_use": "设计时通常需要考虑角色权限、组织流程、采购和交付。",
+    "usage_rule": "设计时通常需要考虑角色权限、组织流程、采购和交付。",
+    "aliases": []
+  },
+  {
+    "id": 6,
+    "term": "C端 / B2C",
+    "category": "产品基础",
+    "definition": "面向个人消费者提供产品和服务。",
+    "when_to_use": "更关注体验、增长、留存、传播和转化。",
+    "usage_rule": "更关注体验、增长、留存、传播和转化。",
+    "aliases": []
+  },
+  {
+    "id": 7,
+    "term": "G端",
+    "category": "产品基础",
+    "definition": "面向政府或公共机构的产品。",
+    "when_to_use": "常需要关注合规、招采、数据安全和复杂协作流程。",
+    "usage_rule": "常需要关注合规、招采、数据安全和复杂协作流程。",
+    "aliases": []
+  },
+  {
+    "id": 8,
+    "term": "SaaS",
+    "category": "产品基础",
+    "definition": "Software as a Service，软件即服务，通常通过订阅持续提供能力。",
+    "when_to_use": "设计商业模式时关注订阅、续费、席位、使用量和服务成本。",
+    "usage_rule": "设计商业模式时关注订阅、续费、席位、使用量和服务成本。",
+    "aliases": []
+  },
+  {
+    "id": 9,
+    "term": "Pain Point",
+    "category": "产品基础",
+    "definition": "用户在完成目标过程中真实存在的麻烦、损失或阻力。",
+    "when_to_use": "不要把用户说出的解决方案直接当成痛点，要继续追问根因。",
+    "usage_rule": "不要把用户说出的解决方案直接当成痛点，要继续追问根因。",
+    "aliases": []
+  },
+  {
+    "id": 10,
+    "term": "Scenario",
+    "category": "产品基础",
+    "definition": "用户在特定时间、地点、任务和约束下使用产品的具体情境。",
+    "when_to_use": "写 PRD 前先描述核心使用场景。",
+    "usage_rule": "写 PRD 前先描述核心使用场景。",
+    "aliases": []
+  },
+  {
+    "id": 11,
+    "term": "Use Case",
+    "category": "产品基础",
+    "definition": "描述某个角色如何通过系统完成一个具体目标的用例。",
+    "when_to_use": "用于澄清主流程、前置条件、异常情况和完成条件。",
+    "usage_rule": "用于澄清主流程、前置条件、异常情况和完成条件。",
+    "aliases": []
+  },
+  {
+    "id": 12,
+    "term": "Persona",
+    "category": "产品基础",
+    "definition": "基于研究抽象出的典型用户画像。",
+    "when_to_use": "用于统一团队对核心用户的理解，避免‘为所有人设计’。",
+    "usage_rule": "用于统一团队对核心用户的理解，避免‘为所有人设计’。",
+    "aliases": []
+  },
+  {
+    "id": 13,
+    "term": "User Story",
+    "category": "产品基础",
+    "definition": "以‘作为某类用户，我希望……，从而……’表达需求的方式。",
+    "when_to_use": "用于敏捷团队拆解需求和验收。",
+    "usage_rule": "用于敏捷团队拆解需求和验收。",
+    "aliases": []
+  },
+  {
+    "id": 14,
+    "term": "JTBD",
+    "category": "产品基础",
+    "definition": "Jobs To Be Done，用户真正想完成的任务或进步，而非表面功能需求。",
+    "when_to_use": "当用户提出功能时，用它判断背后真正要完成的任务。",
+    "usage_rule": "当用户提出功能时，用它判断背后真正要完成的任务。",
+    "aliases": []
+  },
+  {
+    "id": 15,
+    "term": "Value Proposition",
+    "category": "产品基础",
+    "definition": "产品向目标用户承诺的核心价值。",
+    "when_to_use": "产品定位时回答：为什么用户要选择你而不是现有方案。",
+    "usage_rule": "产品定位时回答：为什么用户要选择你而不是现有方案。",
+    "aliases": []
+  },
+  {
+    "id": 16,
+    "term": "Requirement",
+    "category": "需求与设计",
+    "definition": "需要被解决的用户、业务、合规或技术问题。",
+    "when_to_use": "需求评审时区分问题本身与具体实现方案。",
+    "usage_rule": "需求评审时区分问题本身与具体实现方案。",
+    "aliases": []
+  },
+  {
+    "id": 17,
+    "term": "Requirement Pool",
+    "category": "需求与设计",
+    "definition": "集中存放和管理待评估需求的需求池。",
+    "when_to_use": "把所有反馈先入池，再统一评估优先级，避免临时插单。",
+    "usage_rule": "把所有反馈先入池，再统一评估优先级，避免临时插单。",
+    "aliases": []
+  },
+  {
+    "id": 18,
+    "term": "需求优先级",
+    "category": "需求与设计",
+    "definition": "决定哪些需求先做、后做或不做。",
+    "when_to_use": "结合用户价值、业务价值、风险、成本和战略一致性判断。",
+    "usage_rule": "结合用户价值、业务价值、风险、成本和战略一致性判断。",
+    "aliases": []
+  },
+  {
+    "id": 19,
+    "term": "RICE",
+    "category": "需求与设计",
+    "definition": "Reach × Impact × Confidence ÷ Effort 的优先级框架。",
+    "when_to_use": "适合多个候选需求需要相对量化比较时使用。",
+    "usage_rule": "适合多个候选需求需要相对量化比较时使用。",
+    "aliases": []
+  },
+  {
+    "id": 20,
+    "term": "MoSCoW",
+    "category": "需求与设计",
+    "definition": "Must / Should / Could / Won’t，用于按必要性给需求分层。",
+    "when_to_use": "适合版本范围管理和资源有限时做取舍。",
+    "usage_rule": "适合版本范围管理和资源有限时做取舍。",
+    "aliases": []
+  },
+  {
+    "id": 21,
+    "term": "Kano Model",
+    "category": "需求与设计",
+    "definition": "把需求分为基本型、期望型、兴奋型等，帮助理解满意度影响。",
+    "when_to_use": "适合分析体验型功能和差异化价值。",
+    "usage_rule": "适合分析体验型功能和差异化价值。",
+    "aliases": []
+  },
+  {
+    "id": 22,
+    "term": "MVP",
+    "category": "需求与设计",
+    "definition": "Minimum Viable Product，用最低成本验证最关键产品假设的最小可行方案。",
+    "when_to_use": "重点不是‘功能少’，而是‘能验证核心假设’。",
+    "usage_rule": "重点不是‘功能少’，而是‘能验证核心假设’。",
+    "aliases": []
+  },
+  {
+    "id": 23,
+    "term": "Prototype",
+    "category": "需求与设计",
+    "definition": "用于验证结构、流程或交互的原型。",
+    "when_to_use": "开发前用来发现交互问题并降低沟通成本。",
+    "usage_rule": "开发前用来发现交互问题并降低沟通成本。",
+    "aliases": []
+  },
+  {
+    "id": 24,
+    "term": "Wireframe",
+    "category": "需求与设计",
+    "definition": "低保真线框图，表达页面信息层级和基本布局。",
+    "when_to_use": "用于快速讨论结构，不要过早陷入视觉细节。",
+    "usage_rule": "用于快速讨论结构，不要过早陷入视觉细节。",
+    "aliases": []
+  },
+  {
+    "id": 25,
+    "term": "Information Architecture",
+    "category": "需求与设计",
+    "definition": "信息架构，定义内容、页面、功能之间如何组织和层级化。",
+    "when_to_use": "复杂产品先做 IA，再做页面细节。",
+    "usage_rule": "复杂产品先做 IA，再做页面细节。",
+    "aliases": []
+  },
+  {
+    "id": 26,
+    "term": "User Flow",
+    "category": "需求与设计",
+    "definition": "用户为完成目标经过的一系列步骤。",
+    "when_to_use": "用于优化路径长度、分支、阻塞点和转化。",
+    "usage_rule": "用于优化路径长度、分支、阻塞点和转化。",
+    "aliases": []
+  },
+  {
+    "id": 27,
+    "term": "Flowchart",
+    "category": "需求与设计",
+    "definition": "用图形描述业务、系统或用户流程。",
+    "when_to_use": "适合表达条件分支、异常处理和多角色协作。",
+    "usage_rule": "适合表达条件分支、异常处理和多角色协作。",
+    "aliases": []
+  },
+  {
+    "id": 28,
+    "term": "Interaction Design",
+    "category": "需求与设计",
+    "definition": "交互设计，定义用户与界面之间的操作和反馈机制。",
+    "when_to_use": "关注操作是否可理解、可恢复、可预期。",
+    "usage_rule": "关注操作是否可理解、可恢复、可预期。",
+    "aliases": []
+  },
+  {
+    "id": 29,
+    "term": "UX",
+    "category": "需求与设计",
+    "definition": "User Experience，用户完成目标时的整体体验。",
+    "when_to_use": "不仅是界面美观，还包括效率、理解成本、信任和情绪。",
+    "usage_rule": "不仅是界面美观，还包括效率、理解成本、信任和情绪。",
+    "aliases": []
+  },
+  {
+    "id": 30,
+    "term": "UI",
+    "category": "需求与设计",
+    "definition": "User Interface，用户看到和操作的界面。",
+    "when_to_use": "UI 是体验的一部分，不等于产品设计本身。",
+    "usage_rule": "UI 是体验的一部分，不等于产品设计本身。",
+    "aliases": []
+  },
+  {
+    "id": 31,
+    "term": "PRD",
+    "category": "产品文档",
+    "definition": "Product Requirements Document，描述为什么做、做什么、范围、流程、规则、验收和指标。",
+    "when_to_use": "用于让研发、设计、测试等团队形成一致理解。",
+    "usage_rule": "用于让研发、设计、测试等团队形成一致理解。",
+    "aliases": []
+  },
+  {
+    "id": 32,
+    "term": "BRD",
+    "category": "产品文档",
+    "definition": "Business Requirements Document，描述商业背景、目标、价值和约束。",
+    "when_to_use": "适合重大项目立项或需要向业务决策者说明商业价值时。",
+    "usage_rule": "适合重大项目立项或需要向业务决策者说明商业价值时。",
+    "aliases": []
+  },
+  {
+    "id": 33,
+    "term": "MRD",
+    "category": "产品文档",
+    "definition": "Market Requirements Document，描述市场、用户、竞争和机会。",
+    "when_to_use": "适合进入新市场、定义新品类或做产品方向判断。",
+    "usage_rule": "适合进入新市场、定义新品类或做产品方向判断。",
+    "aliases": []
+  },
+  {
+    "id": 34,
+    "term": "Roadmap",
+    "category": "产品文档",
+    "definition": "产品路线图，展示未来一段时间的目标、主题和关键版本。",
+    "when_to_use": "用于对齐方向，不应退化成固定不变的功能排期表。",
+    "usage_rule": "用于对齐方向，不应退化成固定不变的功能排期表。",
+    "aliases": []
+  },
+  {
+    "id": 35,
+    "term": "Product Vision",
+    "category": "产品文档",
+    "definition": "产品愿景，描述长期希望为用户和市场创造什么状态。",
+    "when_to_use": "用来指导长期取舍和团队共识。",
+    "usage_rule": "用来指导长期取舍和团队共识。",
+    "aliases": []
+  },
+  {
+    "id": 36,
+    "term": "Product Strategy",
+    "category": "产品文档",
+    "definition": "产品战略，为实现愿景而选择的目标市场、价值主张和竞争路径。",
+    "when_to_use": "回答‘我们选择在哪里赢，以及不做什么’。",
+    "usage_rule": "回答‘我们选择在哪里赢，以及不做什么’。",
+    "aliases": []
+  },
+  {
+    "id": 37,
+    "term": "Scope",
+    "category": "产品文档",
+    "definition": "项目或版本明确包含与不包含的范围。",
+    "when_to_use": "写清 In Scope / Out of Scope 可显著减少需求膨胀。",
+    "usage_rule": "写清 In Scope / Out of Scope 可显著减少需求膨胀。",
+    "aliases": []
+  },
+  {
+    "id": 38,
+    "term": "Acceptance Criteria",
+    "category": "产品文档",
+    "definition": "验收标准，定义什么条件下需求算完成。",
+    "when_to_use": "每个核心需求都应有可测试的完成条件。",
+    "usage_rule": "每个核心需求都应有可测试的完成条件。",
+    "aliases": []
+  },
+  {
+    "id": 39,
+    "term": "Release Note",
+    "category": "产品文档",
+    "definition": "面向用户或团队说明某版本新增、优化和修复内容。",
+    "when_to_use": "用于上线沟通和用户教育。",
+    "usage_rule": "用于上线沟通和用户教育。",
+    "aliases": []
+  },
+  {
+    "id": 40,
+    "term": "Changelog",
+    "category": "产品文档",
+    "definition": "按时间记录产品或系统变化的日志。",
+    "when_to_use": "适合追踪版本历史和技术变更。",
+    "usage_rule": "适合追踪版本历史和技术变更。",
+    "aliases": []
+  },
+  {
+    "id": 41,
+    "term": "Agile",
+    "category": "研发协作",
+    "definition": "敏捷开发，通过小步迭代、快速反馈降低不确定性。",
+    "when_to_use": "适合需求变化快、需要持续验证的产品。",
+    "usage_rule": "适合需求变化快、需要持续验证的产品。",
+    "aliases": []
+  },
+  {
+    "id": 42,
+    "term": "Scrum",
+    "category": "研发协作",
+    "definition": "一种常见敏捷框架，围绕固定节奏的 Sprint 推进。",
+    "when_to_use": "用于组织迭代、站会、评审和复盘。",
+    "usage_rule": "用于组织迭代、站会、评审和复盘。",
+    "aliases": []
+  },
+  {
+    "id": 43,
+    "term": "Sprint",
+    "category": "研发协作",
+    "definition": "固定长度的一次开发迭代，常见为 1–2 周。",
+    "when_to_use": "Sprint 内尽量保持目标稳定，避免无限插单。",
+    "usage_rule": "Sprint 内尽量保持目标稳定，避免无限插单。",
+    "aliases": []
+  },
+  {
+    "id": 44,
+    "term": "Backlog",
+    "category": "研发协作",
+    "definition": "按优先级管理的待办需求或任务列表。",
+    "when_to_use": "定期梳理，避免成为永不清理的‘需求仓库’。",
+    "usage_rule": "定期梳理，避免成为永不清理的‘需求仓库’。",
+    "aliases": []
+  },
+  {
+    "id": 45,
+    "term": "Epic",
+    "category": "研发协作",
+    "definition": "较大的业务目标或需求主题，需要拆成多个 Story。",
+    "when_to_use": "用于管理大范围能力建设。",
+    "usage_rule": "用于管理大范围能力建设。",
+    "aliases": []
+  },
+  {
+    "id": 46,
+    "term": "Story",
+    "category": "研发协作",
+    "definition": "可在一个迭代中交付的用户价值单元。",
+    "when_to_use": "要足够小、可验收、对用户有意义。",
+    "usage_rule": "要足够小、可验收、对用户有意义。",
+    "aliases": []
+  },
+  {
+    "id": 47,
+    "term": "Task",
+    "category": "研发协作",
+    "definition": "实现 Story 所需的具体工作任务。",
+    "when_to_use": "通常由研发、设计、测试进一步拆分。",
+    "usage_rule": "通常由研发、设计、测试进一步拆分。",
+    "aliases": []
+  },
+  {
+    "id": 48,
+    "term": "Milestone",
+    "category": "研发协作",
+    "definition": "项目中的关键阶段性节点或成果。",
+    "when_to_use": "例如 Beta 上线、正式发布、首批客户交付。",
+    "usage_rule": "例如 Beta 上线、正式发布、首批客户交付。",
+    "aliases": []
+  },
+  {
+    "id": 49,
+    "term": "Iteration",
+    "category": "研发协作",
+    "definition": "基于数据和反馈不断改进产品的过程。",
+    "when_to_use": "上线不是结束，而是进入下一轮验证。",
+    "usage_rule": "上线不是结束，而是进入下一轮验证。",
+    "aliases": []
+  },
+  {
+    "id": 50,
+    "term": "Release",
+    "category": "研发协作",
+    "definition": "将一个版本正式交付给用户。",
+    "when_to_use": "需要配合测试、监控、回滚和沟通方案。",
+    "usage_rule": "需要配合测试、监控、回滚和沟通方案。",
+    "aliases": []
+  },
+  {
+    "id": 51,
+    "term": "Gray Release",
+    "category": "研发协作",
+    "definition": "灰度发布，先向少量用户或流量开放新版本。",
+    "when_to_use": "用于控制风险并观察真实效果。",
+    "usage_rule": "用于控制风险并观察真实效果。",
+    "aliases": []
+  },
+  {
+    "id": 52,
+    "term": "Rollback",
+    "category": "研发协作",
+    "definition": "新版本出现严重问题时恢复到上一稳定版本。",
+    "when_to_use": "上线方案必须提前考虑是否可回滚。",
+    "usage_rule": "上线方案必须提前考虑是否可回滚。",
+    "aliases": []
+  },
+  {
+    "id": 53,
+    "term": "Bug",
+    "category": "研发协作",
+    "definition": "产品行为与预期、设计或规则不一致的软件缺陷。",
+    "when_to_use": "需要按严重度、影响范围和修复成本分级。",
+    "usage_rule": "需要按严重度、影响范围和修复成本分级。",
+    "aliases": []
+  },
+  {
+    "id": 54,
+    "term": "Blocker",
+    "category": "研发协作",
+    "definition": "会阻止项目继续推进的关键问题。",
+    "when_to_use": "应明确责任人、解决路径和截止时间。",
+    "usage_rule": "应明确责任人、解决路径和截止时间。",
+    "aliases": []
+  },
+  {
+    "id": 55,
+    "term": "Tech Debt",
+    "category": "研发协作",
+    "definition": "为了速度或短期目标留下的技术妥协，未来需要偿还。",
+    "when_to_use": "产品经理要理解短期收益与长期维护成本。",
+    "usage_rule": "产品经理要理解短期收益与长期维护成本。",
+    "aliases": []
+  },
+  {
+    "id": 56,
+    "term": "KPI",
+    "category": "数据与增长",
+    "definition": "Key Performance Indicator，衡量关键业务或绩效结果的指标。",
+    "when_to_use": "指标要可衡量并与目标直接相关。",
+    "usage_rule": "指标要可衡量并与目标直接相关。",
+    "aliases": []
+  },
+  {
+    "id": 57,
+    "term": "OKR",
+    "category": "数据与增长",
+    "definition": "Objectives and Key Results，目标与关键结果管理方法。",
+    "when_to_use": "O 描述方向，KR 描述可验证结果。",
+    "usage_rule": "O 描述方向，KR 描述可验证结果。",
+    "aliases": []
+  },
+  {
+    "id": 58,
+    "term": "North Star Metric",
+    "category": "数据与增长",
+    "definition": "北极星指标，最能代表用户持续获得核心价值的关键指标。",
+    "when_to_use": "避免选纯流量指标，应与用户价值和长期增长相关。",
+    "usage_rule": "避免选纯流量指标，应与用户价值和长期增长相关。",
+    "aliases": []
+  },
+  {
+    "id": 59,
+    "term": "DAU",
+    "category": "数据与增长",
+    "definition": "Daily Active Users，日活跃用户数。",
+    "when_to_use": "要先定义什么行为才算‘活跃’。",
+    "usage_rule": "要先定义什么行为才算‘活跃’。",
+    "aliases": []
+  },
+  {
+    "id": 60,
+    "term": "WAU",
+    "category": "数据与增长",
+    "definition": "Weekly Active Users，周活跃用户数。",
+    "when_to_use": "适合非每日高频产品。",
+    "usage_rule": "适合非每日高频产品。",
+    "aliases": []
+  },
+  {
+    "id": 61,
+    "term": "MAU",
+    "category": "数据与增长",
+    "definition": "Monthly Active Users，月活跃用户数。",
+    "when_to_use": "结合 DAU/MAU 可粗看使用频率和粘性。",
+    "usage_rule": "结合 DAU/MAU 可粗看使用频率和粘性。",
+    "aliases": []
+  },
+  {
+    "id": 62,
+    "term": "PV",
+    "category": "数据与增长",
+    "definition": "Page View，页面被浏览的总次数。",
+    "when_to_use": "一个用户多次访问会重复计数。",
+    "usage_rule": "一个用户多次访问会重复计数。",
+    "aliases": []
+  },
+  {
+    "id": 63,
+    "term": "UV",
+    "category": "数据与增长",
+    "definition": "Unique Visitor，独立访问用户数。",
+    "when_to_use": "用于看有多少不同用户访问，而非访问次数。",
+    "usage_rule": "用于看有多少不同用户访问，而非访问次数。",
+    "aliases": []
+  },
+  {
+    "id": 64,
+    "term": "Retention",
+    "category": "数据与增长",
+    "definition": "留存率，某批用户经过一段时间后仍继续使用的比例。",
+    "when_to_use": "应按产品使用周期选择次日、7日、30日等口径。",
+    "usage_rule": "应按产品使用周期选择次日、7日、30日等口径。",
+    "aliases": []
+  },
+  {
+    "id": 65,
+    "term": "Churn",
+    "category": "数据与增长",
+    "definition": "流失率，用户停止使用、取消订阅或离开的比例。",
+    "when_to_use": "需要定义何时算流失并分析原因。",
+    "usage_rule": "需要定义何时算流失并分析原因。",
+    "aliases": []
+  },
+  {
+    "id": 66,
+    "term": "Conversion Rate",
+    "category": "数据与增长",
+    "definition": "转化率，从一个关键阶段进入下一个阶段的比例。",
+    "when_to_use": "例如访问→注册、试用→付费。",
+    "usage_rule": "例如访问→注册、试用→付费。",
+    "aliases": []
+  },
+  {
+    "id": 67,
+    "term": "Funnel",
+    "category": "数据与增长",
+    "definition": "漏斗，把用户关键路径拆成多个阶段观察流失。",
+    "when_to_use": "先找最大流失点，再结合定性研究解释原因。",
+    "usage_rule": "先找最大流失点，再结合定性研究解释原因。",
+    "aliases": []
+  },
+  {
+    "id": 68,
+    "term": "CTR",
+    "category": "数据与增长",
+    "definition": "Click Through Rate，点击次数或点击用户占曝光的比例。",
+    "when_to_use": "必须明确分母是曝光次数还是曝光用户。",
+    "usage_rule": "必须明确分母是曝光次数还是曝光用户。",
+    "aliases": []
+  },
+  {
+    "id": 69,
+    "term": "ARPU",
+    "category": "数据与增长",
+    "definition": "Average Revenue Per User，平均每个用户贡献的收入。",
+    "when_to_use": "用于商业化和用户价值分析。",
+    "usage_rule": "用于商业化和用户价值分析。",
+    "aliases": []
+  },
+  {
+    "id": 70,
+    "term": "CAC",
+    "category": "数据与增长",
+    "definition": "Customer Acquisition Cost，获得一个新增付费客户的平均成本。",
+    "when_to_use": "需要把相关营销和销售成本计入口径。",
+    "usage_rule": "需要把相关营销和销售成本计入口径。",
+    "aliases": []
+  },
+  {
+    "id": 71,
+    "term": "LTV",
+    "category": "数据与增长",
+    "definition": "Lifetime Value，用户生命周期内预期贡献的总价值。",
+    "when_to_use": "LTV 与 CAC 应结合判断商业模型可持续性。",
+    "usage_rule": "LTV 与 CAC 应结合判断商业模型可持续性。",
+    "aliases": []
+  },
+  {
+    "id": 72,
+    "term": "GMV",
+    "category": "数据与增长",
+    "definition": "Gross Merchandise Value，平台一定周期内的交易总额。",
+    "when_to_use": "GMV 不是收入，不能直接等同利润。",
+    "usage_rule": "GMV 不是收入，不能直接等同利润。",
+    "aliases": []
+  },
+  {
+    "id": 73,
+    "term": "ROI",
+    "category": "数据与增长",
+    "definition": "Return on Investment，投入产出比。",
+    "when_to_use": "用于比较不同项目、功能或增长动作的经济收益。",
+    "usage_rule": "用于比较不同项目、功能或增长动作的经济收益。",
+    "aliases": []
+  },
+  {
+    "id": 74,
+    "term": "A/B Test",
+    "category": "数据与增长",
+    "definition": "将用户随机分组，对不同方案进行控制实验。",
+    "when_to_use": "需要提前定义假设、主指标、样本和实验周期。",
+    "usage_rule": "需要提前定义假设、主指标、样本和实验周期。",
+    "aliases": []
+  },
+  {
+    "id": 75,
+    "term": "Cohort Analysis",
+    "category": "数据与增长",
+    "definition": "按共同起点或特征分组，比较不同批次用户后续表现。",
+    "when_to_use": "特别适合分析留存、付费和版本影响。",
+    "usage_rule": "特别适合分析留存、付费和版本影响。",
+    "aliases": []
+  },
+  {
+    "id": 76,
+    "term": "PMF",
+    "category": "商业与增长",
+    "definition": "Product-Market Fit，产品与市场需求形成较稳定匹配。",
+    "when_to_use": "常通过高留存、自然增长、强需求和付费意愿等信号综合判断。",
+    "usage_rule": "常通过高留存、自然增长、强需求和付费意愿等信号综合判断。",
+    "aliases": []
+  },
+  {
+    "id": 77,
+    "term": "Growth",
+    "category": "商业与增长",
+    "definition": "通过产品、渠道、运营等手段持续提升核心业务指标。",
+    "when_to_use": "增长不是单纯拉新，要覆盖激活、留存、变现和传播。",
+    "usage_rule": "增长不是单纯拉新，要覆盖激活、留存、变现和传播。",
+    "aliases": []
+  },
+  {
+    "id": 78,
+    "term": "Growth Loop",
+    "category": "商业与增长",
+    "definition": "用户行为能够持续带来下一轮新增或价值的增长闭环。",
+    "when_to_use": "例如创作者产内容→内容获客→新用户成为创作者。",
+    "usage_rule": "例如创作者产内容→内容获客→新用户成为创作者。",
+    "aliases": []
+  },
+  {
+    "id": 79,
+    "term": "Acquisition",
+    "category": "商业与增长",
+    "definition": "获客，让目标用户第一次进入产品。",
+    "when_to_use": "评估渠道质量不能只看量，还要看后续留存和价值。",
+    "usage_rule": "评估渠道质量不能只看量，还要看后续留存和价值。",
+    "aliases": []
+  },
+  {
+    "id": 80,
+    "term": "Activation",
+    "category": "商业与增长",
+    "definition": "用户第一次真正感受到产品核心价值的关键时刻。",
+    "when_to_use": "需要明确产品的 Aha Moment。",
+    "usage_rule": "需要明确产品的 Aha Moment。",
+    "aliases": []
+  },
+  {
+    "id": 81,
+    "term": "Monetization",
+    "category": "商业与增长",
+    "definition": "把用户价值转化为收入的机制。",
+    "when_to_use": "订阅、按量、广告、交易佣金等都属于商业化方式。",
+    "usage_rule": "订阅、按量、广告、交易佣金等都属于商业化方式。",
+    "aliases": []
+  },
+  {
+    "id": 82,
+    "term": "Subscription",
+    "category": "商业与增长",
+    "definition": "订阅制，用户按周期持续付费使用产品。",
+    "when_to_use": "重点关注续费、流失、套餐结构和单位成本。",
+    "usage_rule": "重点关注续费、流失、套餐结构和单位成本。",
+    "aliases": []
+  },
+  {
+    "id": 83,
+    "term": "Freemium",
+    "category": "商业与增长",
+    "definition": "基础能力免费，高级功能或更高额度收费。",
+    "when_to_use": "免费层应能让用户感受价值，但又保留清晰升级理由。",
+    "usage_rule": "免费层应能让用户感受价值，但又保留清晰升级理由。",
+    "aliases": []
+  },
+  {
+    "id": 84,
+    "term": "Upsell",
+    "category": "商业与增长",
+    "definition": "让已有客户购买更高版本、更多席位或更大额度。",
+    "when_to_use": "B端和 SaaS 中常与客户成功结合。",
+    "usage_rule": "B端和 SaaS 中常与客户成功结合。",
+    "aliases": []
+  },
+  {
+    "id": 85,
+    "term": "Unit Economics",
+    "category": "商业与增长",
+    "definition": "单位经济模型，分析单个用户、订单或客户是否赚钱。",
+    "when_to_use": "典型关注 LTV、CAC、毛利、服务成本和回收期。",
+    "usage_rule": "典型关注 LTV、CAC、毛利、服务成本和回收期。",
+    "aliases": []
+  },
+  {
+    "id": 86,
+    "term": "LLM",
+    "category": "AI产品",
+    "definition": "Large Language Model，大语言模型，可理解和生成自然语言及多种内容。",
+    "when_to_use": "AI 产品经理要理解不同模型在质量、速度、成本、上下文和工具调用上的差异。",
+    "usage_rule": "AI 产品经理要理解不同模型在质量、速度、成本、上下文和工具调用上的差异。",
+    "aliases": []
+  },
+  {
+    "id": 87,
+    "term": "Prompt",
+    "category": "AI产品",
+    "definition": "发送给模型的指令、上下文和约束。",
+    "when_to_use": "不要把产品效果完全依赖‘神奇提示词’，应结合流程、数据、工具和评测。",
+    "usage_rule": "不要把产品效果完全依赖‘神奇提示词’，应结合流程、数据、工具和评测。",
+    "aliases": []
+  },
+  {
+    "id": 88,
+    "term": "Token",
+    "category": "AI产品",
+    "definition": "模型处理文本等内容时使用的计量单位，也是上下文和成本的重要基础。",
+    "when_to_use": "设计长文本产品时需关注输入输出 Token 和成本。",
+    "usage_rule": "设计长文本产品时需关注输入输出 Token 和成本。",
+    "aliases": []
+  },
+  {
+    "id": 89,
+    "term": "Context Window",
+    "category": "AI产品",
+    "definition": "模型单次请求可以处理的上下文容量。",
+    "when_to_use": "上下文更大不等于一定更好，仍需控制信息质量和注意力稀释。",
+    "usage_rule": "上下文更大不等于一定更好，仍需控制信息质量和注意力稀释。",
+    "aliases": []
+  },
+  {
+    "id": 90,
+    "term": "RAG",
+    "category": "AI产品",
+    "definition": "Retrieval-Augmented Generation，先从外部知识源检索相关信息，再让模型基于检索内容生成答案。",
+    "when_to_use": "适合需要私有知识、最新信息和可追溯依据的场景。",
+    "usage_rule": "适合需要私有知识、最新信息和可追溯依据的场景。",
+    "aliases": []
+  },
+  {
+    "id": 91,
+    "term": "Embedding",
+    "category": "AI产品",
+    "definition": "把文本、图像等内容映射成向量，以表示语义特征。",
+    "when_to_use": "常用于相似度搜索、聚类、推荐和 RAG。",
+    "usage_rule": "常用于相似度搜索、聚类、推荐和 RAG。",
+    "aliases": []
+  },
+  {
+    "id": 92,
+    "term": "Vector Database",
+    "category": "AI产品",
+    "definition": "用于存储和检索向量的数据库或向量检索系统。",
+    "when_to_use": "RAG 中常用于根据语义找到相关知识片段。",
+    "usage_rule": "RAG 中常用于根据语义找到相关知识片段。",
+    "aliases": []
+  },
+  {
+    "id": 93,
+    "term": "Agent",
+    "category": "AI产品",
+    "definition": "能够围绕目标进行理解、规划、调用工具、观察结果并继续行动的 AI 系统。",
+    "when_to_use": "不要把任何聊天机器人都叫 Agent，关键在于可执行和闭环。",
+    "usage_rule": "不要把任何聊天机器人都叫 Agent，关键在于可执行和闭环。",
+    "aliases": []
+  },
+  {
+    "id": 94,
+    "term": "Tool Calling",
+    "category": "AI产品",
+    "definition": "模型按照结构化参数调用外部工具或函数的能力。",
+    "when_to_use": "用于连接搜索、数据库、邮件、日历、业务 API 等。",
+    "usage_rule": "用于连接搜索、数据库、邮件、日历、业务 API 等。",
+    "aliases": []
+  },
+  {
+    "id": 95,
+    "term": "MCP",
+    "category": "AI产品",
+    "definition": "Model Context Protocol，用统一协议让模型或 Agent 接入外部工具、资源和上下文。",
+    "when_to_use": "适合需要标准化连接多种数据和工具的 Agent 产品。",
+    "usage_rule": "适合需要标准化连接多种数据和工具的 Agent 产品。",
+    "aliases": []
+  },
+  {
+    "id": 96,
+    "term": "Fine-tuning",
+    "category": "AI产品",
+    "definition": "在基础模型上用特定数据继续训练，以调整输出行为或专业能力。",
+    "when_to_use": "不要在 RAG、Prompt、工具调用能解决问题时默认选择微调。",
+    "usage_rule": "不要在 RAG、Prompt、工具调用能解决问题时默认选择微调。",
+    "aliases": []
+  },
+  {
+    "id": 97,
+    "term": "Hallucination",
+    "category": "AI产品",
+    "definition": "模型生成貌似合理但事实错误、无依据或虚构的内容。",
+    "when_to_use": "高风险场景需要用检索、工具、约束、引用和人工审核降低风险。",
+    "usage_rule": "高风险场景需要用检索、工具、约束、引用和人工审核降低风险。",
+    "aliases": []
+  },
+  {
+    "id": 98,
+    "term": "Evaluation / Eval",
+    "category": "AI产品",
+    "definition": "系统化评估 AI 输出质量、任务成功、稳定性和风险的方法。",
+    "when_to_use": "应建立测试集、指标、人工标准与自动评测组合。",
+    "usage_rule": "应建立测试集、指标、人工标准与自动评测组合。",
+    "aliases": []
+  },
+  {
+    "id": 99,
+    "term": "Latency",
+    "category": "AI产品",
+    "definition": "从用户发出请求到获得结果的等待时间。",
+    "when_to_use": "AI 产品常需要在质量、成本和速度之间做权衡。",
+    "usage_rule": "AI 产品常需要在质量、成本和速度之间做权衡。",
+    "aliases": []
+  },
+  {
+    "id": 100,
+    "term": "Task Success Rate",
+    "category": "AI产品",
+    "definition": "AI 在目标定义下成功完成任务的比例。",
+    "when_to_use": "比单纯调用次数更接近 Agent 产品的真实用户价值。",
+    "usage_rule": "比单纯调用次数更接近 Agent 产品的真实用户价值。",
+    "aliases": []
+  }
+]

@@ -1,0 +1,13 @@
+# Runtime and machine-local data must never enter the source repository.
+**/__pycache__/
+**/*.pyc
+**/*.sqlite3
+**/*.sqlite3-*
+**/*.db
+**/*.db-*
+**/*.sha256
+**/backups/
+**/quarantine/
+**/.env
+**/.env.*
+*.zip

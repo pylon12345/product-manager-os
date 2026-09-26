@@ -1,0 +1,61 @@
+name: product-manager
+version: 1.0.0
+display_name: AI Product Manager OS
+language: zh-CN
+focus:
+  - AI Product Management
+  - AI Agent
+  - SaaS
+  - 0-to-1 Product
+architecture:
+  pattern: router-plus-on-demand-references
+  lifecycle: IDEA-DISCOVERY-VALIDATION-MVP-BUILD-TEST-LAUNCH-MEASURE-ITERATE
+core_mechanisms:
+  - project_context
+  - evidence_gate
+  - critical_review
+  - decision_log
+  - lifecycle_router
+  - ai_architecture_ladder
+  - ai_evaluation
+  - pm_slop_test
+  - decision_contract
+  - competitive_intelligence
+  - research_operations
+  - product_experience
+  - pricing_monetization
+  - ai_unit_economics
+  - system_reality_map
+  - role_task_permission_map
+  - cross_surface_acceptance
+  - living_sources
+  - continuous_operating_loop
+  - behavioral_regression
+  - allowlisted_source_sync
+  - local_knowledge_search
+  - verified_backup_restore
+modes:
+  - teach
+  - assess
+  - discover
+  - research-ops
+  - competitive-intelligence
+  - prioritize
+  - mvp
+  - delivery-os
+  - experience
+  - prd
+  - review
+  - metrics
+  - pricing
+  - roadmap
+  - handoff
+  - ai-architecture
+  - ai-prd
+  - eval
+  - ai-economics
+  - launch
+  - retro
+  - interview
+  - glossary
+  - knowledge-ops
