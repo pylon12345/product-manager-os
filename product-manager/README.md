@@ -1,8 +1,8 @@
-# AI Product Manager OS v1.1.0
+# AI Product Manager OS v1.2.0
 
 一个面向 **AI 产品经理、AI Agent、SaaS 和 0→1 开发** 的中文产品经理 Skill。
 
-v1.1.0 在首个正式版基础上加入已有项目反推拆解：从代码/产品仓库重建现状，再把产品意图、用户价值与待验证假设分开。它可在 Codex、Claude Code、Cursor、Windsurf 或其他 Agent 工作流中复用；升级不会迁移或重抓包外知识库，也不会改变已配置的每周自动化。
+v1.2.0 加入 Skill 自身的受控改进闭环：真实坏例 → 归因 → 候选修改 → 同一夹具的新旧版人工评测 → 维护者批准 → 发布后观察。已有项目反推拆解等 v1.1 能力保持不变。它可在 Codex、Claude Code、Cursor、Windsurf 或其他 Agent 工作流中复用；升级不会迁移或重抓包外知识库，也不会改变已配置的每周自动化。
 
 ## 正式版核心能力
 
@@ -23,6 +23,7 @@ v1.1.0 在首个正式版基础上加入已有项目反推拆解：从代码/产
 - 从已有仓库反推用户任务、能力、模块依赖与下一步；关键结论附来源，不把代码存在等同已上线或被用户需要。
 - 将项目证据、决策承诺、执行结果与复查连接成轻量持续工作闭环，并加入可复现的行为回归材料。
 - 受控公开来源增量同步、本地检索、可校验备份和安全恢复；知识库数据与 Skill 包分离。
+- Skill 自身的坏例归因、候选变更和同夹具新旧版人工评分比较；发布须维护者确认，私有资料不自动入仓。
 
 ## 目录
 
@@ -59,6 +60,7 @@ product-manager/
 │  ├─ mode-prioritize.md
 │  ├─ mode-mvp.md
 │  ├─ mode-reverse-decompose.md
+│  ├─ mode-improve-os.md
 │  ├─ mode-delivery-os.md
 │  ├─ mode-experience.md
 │  ├─ mode-prd.md
@@ -97,10 +99,13 @@ product-manager/
 │  ├─ project-reverse-map.md
 │  ├─ system-reality-map.md
 │  ├─ role-task-permission-map.md
-│  └─ cross-surface-acceptance.md
+│  ├─ cross-surface-acceptance.md
+│  ├─ skill-badcase.md
+│  └─ skill-change-proposal.md
 ├─ workflows/
 │  ├─ lifecycle.md
 │  ├─ continuous-product-loop.md
+│  ├─ skill-improvement-loop.md
 │  ├─ idea-to-mvp.md
 │  ├─ feature-development.md
 │  ├─ ai-product-0-to-1.md
@@ -126,16 +131,24 @@ product-manager/
 
 ## 正式版运行资产
 
-- 29 个按需 references，覆盖从项目反推、发现、研究、竞争、定价到 AI 质量、成本、跨端交付、持续运营和知识库运维。
-- 23 个可直接填充的产品模板。
-- 9 个端到端 workflows。
+- 30 个按需 references，覆盖从项目反推、发现、研究、竞争、定价到 AI 质量、成本、跨端交付、持续运营、Skill 自身改进和知识库运维。
+- 25 个可直接填充的产品与维护模板。
+- 10 个端到端 workflows。
 - Codex 原生 `agents/openai.yaml`，默认允许自动发现，也可用 `$product-manager` 显式调用。
 - `validate.py` 提供无网络、只读的包完整性检查；行为回归材料用于检查实际任务表现，不能以结构校验代替。
 - `scripts/pm_kb.py` 使用 Python 标准库，在明确指定的数据目录中保存公开网页快照并管理本地备份；安装后不会自行运行。
 
 ## 行为质量怎样验收
 
-`tests/behavior/` 包含 8 个冻结任务和人工评分规则，覆盖项目反推、多版本交付、定价、AI Eval、单位经济、过期来源、越权与上线后复查。先在全新任务中只提供 Skill 和单个案例输入，保存未经修改的回答；再由评审按可观察标准打分。运行 `python tests/behavior/score.py --check` 只验证案例与规则文件，**不会调用或评判模型**。完整操作见 `tests/behavior/README.md`。
+`tests/behavior/` 包含 9 个冻结任务和人工评分规则，覆盖项目反推、多版本交付、定价、AI Eval、单位经济、过期来源、越权、上线后复查与 Skill 自身改进。先在全新任务中只提供 Skill 和单个案例输入，保存未经修改的回答；再由评审按可观察标准打分。运行 `python tests/behavior/score.py --check` 只验证案例与规则文件，**不会调用或评判模型**。`--compare` 读取同夹具、同模型的两份完整人工评分并列出回归，不能替代人工发布审批。完整操作见 `tests/behavior/README.md`。
+
+## Skill 怎样持续改进
+
+当实际任务暴露错误判断、越权、模式选择或知识时效问题时，用 `improve-os` 先判断根因是否真的在 Skill；在用户指定的**包外私有目录**填 `templates/skill-badcase.md`，再用 `templates/skill-change-proposal.md` 提出最小改动。只有经过权限核对的脱敏/合成复现题可进入公开回归集。旧版和候选版在同一冻结夹具上分别跑出原始回答，由人评分并核对模型构建、采样、工具和外部来源条件，再用 `score.py --compare` 检查差异。脚本只核对模型标识，不能代替条件核对。维护者审查证据、隐私、风险和版本后才批准发布；评分脚本的 PASS 不是发布许可。完整门禁见 `workflows/skill-improvement-loop.md`。
+
+```text
+调用 product-manager，用 improve-os 复盘这次错误建议。先判断是不是 Skill 的问题，给我一个不含客户隐私的坏例摘要、最小候选修改和新旧版复测计划；未经我确认不要修改或发布 Skill。
+```
 
 ## 持续工作怎样运行
 
