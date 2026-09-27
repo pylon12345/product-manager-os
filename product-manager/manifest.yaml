@@ -1,5 +1,5 @@
 name: product-manager
-version: 1.0.0
+version: 1.1.0
 display_name: AI Product Manager OS
 language: zh-CN
 focus:
@@ -26,6 +26,7 @@ core_mechanisms:
   - pricing_monetization
   - ai_unit_economics
   - system_reality_map
+  - project_reverse_decomposition
   - role_task_permission_map
   - cross_surface_acceptance
   - living_sources
@@ -42,6 +43,7 @@ modes:
   - competitive-intelligence
   - prioritize
   - mvp
+  - reverse-decompose
   - delivery-os
   - experience
   - prd

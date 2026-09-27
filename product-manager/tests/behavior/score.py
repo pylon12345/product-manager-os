@@ -55,7 +55,7 @@ def fixture_hash():
 def skeleton(cases, rubric):
     return {
         "run": {
-            "skill_version": "1.0.0",
+            "skill_version": "1.1.0",
             "model": "FILL_ME",
             "date": "YYYY-MM-DD",
             "evaluator": "FILL_ME",

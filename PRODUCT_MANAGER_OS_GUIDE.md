@@ -1,6 +1,6 @@
 # AI Product Manager OS｜正式版产品与运营指南
 
-> 版本：v1.0.0 · 文档日期：2026-09-26 · 适用对象：产品负责人、研究人员、设计与研发协作者、AI 产品运营者
+> 版本：v1.1.0 · 文档日期：2026-09-27 · 适用对象：产品负责人、研究人员、设计与研发协作者、AI 产品运营者
 
 ## 1. 产品定位
 
@@ -23,12 +23,12 @@ AI Product Manager OS 是一个可安装到 Codex 等 Agent 环境的中文产�
 | 入口与路由 | 识别用户意图，只加载当前决定需要的模式 | [SKILL.md](product-manager/SKILL.md)、`agents/openai.yaml` |
 | 项目上下文 | 识别目标用户、战略、商业模式和约束 | `.pmcontext.md`、`templates/pmcontext.md` |
 | 证据与决策 | 区分事实、推断、假设；定义证据门槛与负责人 | `references/decision-contract.md`、`templates/evidence-ledger.md`、`templates/decision-log.md` |
-| 专业模式 | 按问题调用研究、竞争、定价、体验、交付、AI Eval、成本等能力 | `references/mode-*.md` |
+| 专业模式 | 按问题调用项目反推、研究、竞争、定价、体验、交付、AI Eval、成本等能力 | `references/mode-*.md` |
 | 生命周期 | 从想法到验证、构建、上线与复盘 | `workflows/`、`templates/` |
 | 知识更新 | 精确 URL 白名单同步、离线检索、备份及恢复 | `references/knowledge-sources.json`、`scripts/pm_kb.py` |
 | 质量控制 | 结构检查、工具测试与人工行为回归 | `validate.py`、`tests/` |
 
-系统覆盖用户研究、竞品情报、优先级、MVP、产品体验、PRD、定价、AI 架构、Eval、单位经济、研发交接、灰度上线和复盘。方法与模板按任务加载，不要求每次都填写完整套件。产品体验模式定义任务流程、信息优先级、关键状态和验收；视觉风格、高保真 UI 与前端实现仍由设计或开发工作流承担。
+系统覆盖已有项目反推拆解、用户研究、竞品情报、优先级、MVP、产品体验、PRD、定价、AI 架构、Eval、单位经济、研发交接、灰度上线和复盘。方法与模板按任务加载，不要求每次都填写完整套件。产品体验模式定义任务流程、信息优先级、关键状态和验收；视觉风格、高保真 UI 与前端实现仍由设计或开发工作流承担。
 
 ## 3. 标准决策工作流
 
@@ -39,6 +39,8 @@ AI Product Manager OS 是一个可安装到 Codex 等 Agent 环境的中文产�
 3. **选择最小验证**：先确认用户问题和当前替代方案，再决定是访谈、数据核查、原型、MVP 还是完整规格。证据不足时，不以精美 PRD 掩盖未知数。
 4. **交付可执行建议**：结论先行，说明被放弃选项、关键 Trade-off、失败路径、Success Metric、Owner 与下一动作。AI 功能额外规定 Eval、Golden Set、成本、延迟、Guardrail 和人工兜底。
 5. **复查与校准**：建议先标 `PROPOSED`；负责人确认或有可核验的授权记录后才成为 `COMMITTED`。获得真实结果后追加 `REVISITED`，比较预期与实际，并决定继续、调整、回滚或停止。保留原始判断，不覆盖历史。
+
+接手已有代码仓库时可先用 `reverse-decompose`：记录分支/提交和检查范围，从入口与代码证据重建用户任务、能力和模块依赖；把可能的目标用户、价值和业务规则明确标为推断。代码存在、测试通过、已部署和真实用户验收各是不同证据层级，不因反推而自动升级。
 
 产品阶段按 `IDEA → DISCOVERY → VALIDATION → MVP → BUILD → TEST → LAUNCH → MEASURE → ITERATE` 推进。这个序列是检查阶段门槛的工具，不是让每个小请求都走一遍流程。AI 方案优先从规则或传统代码、固定 Workflow 开始；只有必要时才升级到 LLM、RAG、工具调用、Agent 或 Fine-tuning，并说明增益、代价与回退路径。
 
@@ -59,6 +61,10 @@ $product-manager 先评估这个需求是否值得做。目标用户是……；
 
 ```text
 $product-manager 按 delivery-os 审查现有工作台。请分别核对旧版、当前版和演示版，列出目标角色的端到端任务、权限与失败路径，并给出可运营范围和 Go/No-go 门槛。
+```
+
+```text
+$product-manager 用 reverse-decompose 分析这个代码仓库。请先锁定提交版本与检查范围，沿入口→用户任务→能力→模块/数据依赖反推现状；为关键结论标注来源，分开观察、推断和待验证项，并指出最该先核验的一条任务链。不要修改项目文件。
 ```
 
 ```text
@@ -101,7 +107,7 @@ python scripts/pm_kb.py --data-dir "<知识库绝对路径>" --sources-file refe
 
 ## 7. 质量保证与适用结论
 
-该版本提供三层验证手段：`validate.py` 检查包结构；`tests/test_pm_kb.py` 与 `tests/behavior/test_score.py` 检查工具行为；`tests/behavior/` 的 7 个冻结任务与人工评分规则用于观察实际 Agent 回答。行为评估应在隔离的新任务中保留原始回答，记录 Skill 版本、模型、日期和工具限制，再由评审按可观察标准评分。运行 `score.py --check` 仅检查案例与规则文件，**不会自动证明 Skill 的回答质量**。测试协议见 [Behavior regression kit](product-manager/tests/behavior/README.md)。
+该版本提供三层验证手段：`validate.py` 检查包结构；`tests/test_pm_kb.py` 与 `tests/behavior/test_score.py` 检查工具行为；`tests/behavior/` 的 8 个冻结任务与人工评分规则用于观察实际 Agent 回答。行为评估应在隔离的新任务中保留原始回答，记录 Skill 版本、模型、日期和工具限制，再由评审按可观察标准评分。运行 `score.py --check` 仅检查案例与规则文件，**不会自动证明 Skill 的回答质量**。测试协议见 [Behavior regression kit](product-manager/tests/behavior/README.md)。
 
 已实现并可检查的是任务路由、模板与工作流、受控网页同步、本地检索、备份/校验/恢复的工具和相应测试材料。尚不能据此宣称：真实业务转化率提升、定价实验成功、用户满意度提高、任意模型/场景下稳定正确，或自动完成上线后的持续运营。这些结果必须通过真实项目基线、独立验收与持续复查建立。
 
@@ -109,7 +115,7 @@ python scripts/pm_kb.py --data-dir "<知识库绝对路径>" --sources-file refe
 
 ## 8. 维护与版本治理
 
-正式发行版本为 **v1.0.0**；先前 2.x 是开发迭代编号，此次定版**不回退功能，也不迁移、清空或重抓包外知识库**。后续变更应同时更新 `manifest.yaml`、`SKILL.md`、`README.md`、`CHANGELOG.md` 和必要的测试。保留冻结行为案例以比较新旧版本；若修改评分规则，需说明原因并保留可追溯的旧结果。升级前比较现有安装和自定义内容，避免覆盖用户数据。
+当前发行版本为 **v1.1.0**；v1.0.0 是首个正式版，先前 2.x 是开发迭代编号。此次新增项目反推拆解，**不迁移、清空或重抓包外知识库**。后续变更应同时更新 `manifest.yaml`、`SKILL.md`、`README.md`、`CHANGELOG.md` 和必要的测试。保留冻结行为案例以比较新旧版本；若修改评分规则，需说明原因并保留可追溯的旧结果。升级前比较现有安装和自定义内容，避免覆盖用户数据。
 
 知识来源需要维护，但不是“越多越好”：只增加与当前决策相关、可核验、允许抓取的具体页面；记录来源失效、变更与时效风险。业务证据则由项目负责人按权限独立维护，遵循 `PROPOSED → COMMITTED → REVISITED` 的决策闭环。维护目标是减少错误决策和无效工作，而不是增加模板数量或自动化次数。
 

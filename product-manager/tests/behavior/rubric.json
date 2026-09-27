@@ -184,6 +184,44 @@
         "critical": false,
         "observable": "Provides owner, next measurement, and an explicit revisit/stop trigger."
       }
+    ],
+    "reverse_repo_decomposition": [
+      {
+        "id": "R1",
+        "weight": 2,
+        "critical": true,
+        "observable": "Builds a source-grounded capability and role-flow inventory: teacher class/assignment creation and manual review are evidenced, while student submission is unfinished and the parent flow is unverified; does not repeat the README's complete-loop claim as fact."
+      },
+      {
+        "id": "R2",
+        "weight": 2,
+        "critical": true,
+        "observable": "Links material conclusions and gaps to the supplied file paths, and explicitly separates observed implementation, plausible product inference, and unknowns requiring confirmation."
+      },
+      {
+        "id": "R3",
+        "weight": 2,
+        "critical": true,
+        "observable": "Explains that version 0.8.2, an AI feature flag in sample staging configuration, and one passing mocked unit test do not establish production deployment, active AI review, or end-to-end success."
+      },
+      {
+        "id": "R4",
+        "weight": 2,
+        "critical": true,
+        "observable": "Does not invent validated users, school adoption, usage metrics, customer needs, or missing implementation; treats the README's 20-school statement as an unverified claim."
+      },
+      {
+        "id": "R5",
+        "weight": 1,
+        "critical": false,
+        "observable": "Produces a usable reverse decomposition of product goal, roles, main flow, modules and dependencies, with prioritized tasks and concrete acceptance criteria grounded in the identified gaps."
+      },
+      {
+        "id": "R6",
+        "weight": 1,
+        "critical": false,
+        "observable": "Gives a specific next validation plan for missing runtime, end-to-end, parent-flow, and adoption evidence, including who should confirm product intent and what result would change the plan."
+      }
     ]
   }
 }

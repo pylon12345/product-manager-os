@@ -1,9 +1,9 @@
 ---
 name: product-manager
-description: 中文 AI Product Manager OS。用于产品发现、用户研究、竞品情报、优先级、MVP、产品体验、PRD、定价、AI 架构与 Eval、单位经济、研发交接、上线和复盘。按任务路由并区分事实与假设；纯视觉制作与高保真 UI 实现交由设计或开发工作流。
+description: 中文 AI Product Manager OS。用于产品发现、已有项目反推拆解、用户研究、竞品情报、优先级、MVP、产品体验、PRD、定价、AI 架构与 Eval、单位经济、研发交接、上线和复盘。按任务路由并区分事实与假设；纯视觉制作与高保真 UI 实现交由设计或开发工作流。
 ---
 
-# Product Manager Skill v1.0.0
+# Product Manager Skill v1.1.0
 
 这是一个面向 **AI Product / Agent / SaaS / 0→1** 的产品经理工作系统。目标不是产出更多文档，而是减少错误决策、缩短验证路径，并把经过验证的需求交付给研发。
 
@@ -54,6 +54,7 @@ description: 中文 AI Product Manager OS。用于产品发现、用户研究、
 | 竞品分析、市场地图、Win/Loss、竞争回应 | `competitive-intelligence` | `references/mode-competitive-intelligence.md` |
 | 需求排序、砍需求、版本范围 | `prioritize` | `references/mode-prioritize.md` |
 | 做最小版本、验证假设 | `mvp` | `references/mode-mvp.md` |
+| 从已有代码/产品仓库反推能力、任务流程、模块依赖与下一步 | `reverse-decompose` | `references/mode-reverse-decompose.md` |
 | 多版本现状、迁移、完整工作台、跨角色端到端交付 | `delivery-os` | `references/mode-delivery-os.md` |
 | 设计用户流程、页面信息结构、关键状态或检查体验 | `experience` | `references/mode-experience.md` |
 | 写 PRD / Spec / 用户故事 | `prd` | `references/mode-prd.md` |
@@ -77,6 +78,8 @@ description: 中文 AI Product Manager OS。用于产品发现、用户研究、
 若请求同时像多个模式，先确定本轮必须支持的**一个决定**，只选一个主模式；确有依赖时再选一个辅助模式。仅要求建议或审查时不把“下一步”理解成已获准修改项目、上线或联系用户。
 
 `delivery-os` 适用于已有产品的跨端交付判断。它可调用 `templates/system-reality-map.md`、`templates/role-task-permission-map.md`、`templates/cross-surface-acceptance.md`，但仅在对应缺口影响决策时使用；不要为简单功能请求制造三份文档。
+
+`reverse-decompose` 适用于接手已有项目、从仓库反推产品现状与任务拆解。静态代码只证明实现线索，不证明已部署、真实用户需求或业务效果；按需使用 `templates/project-reverse-map.md`，再把上线判断、优先级或新规格交给对应模式。
 
 体验设计的职责边界：本 Skill 定义用户任务、流程、信息优先级、状态、文案原则、可用性假设与验收；视觉风格、高保真稿、组件细节和前端实现由相应设计或开发能力承担。用户明确要求实际 UI 产物时，在完成产品侧约束后继续调用可用的设计或开发工作流。
 

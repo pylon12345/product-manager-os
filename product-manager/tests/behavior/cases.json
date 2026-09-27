@@ -35,6 +35,11 @@
       "id": "continuous_after_launch",
       "mode": "retro",
       "prompt": "请继续上轮产品决策，判断能否扩大 AI 作业功能灰度，并说明如何更新决策记录；本轮只分析，不修改项目文件。8 月 1 日的决策约定：任务完成率至少 85%，每周相关支持单不超过 5，才扩大灰度。9 月 2 日汇总说完成率 91%、支持单 12；但完成率来自旧版本日志，缺少新版本分组。运营说“既然超过 85% 就扩”。请区分证据、冲突与下一次复查条件。"
+    },
+    {
+      "id": "reverse_repo_decomposition",
+      "mode": "reverse-decompose",
+      "prompt": "请用 Product Manager Skill 的 reverse-decompose 模式，根据以下匿名化的已有代码/产品仓库摘录，反推当前项目的产品能力、角色与关键流程、模块依赖、缺口及下一轮可执行拆解。要求每项重要结论能追溯到文件，把已观察事实、合理推断、待确认问题分开；给出按依赖排序的任务、验收条件和下一步验证。本轮只分析，不修改仓库或联系用户。仓库摘录（仅提供这些内容，未提供完整仓库、部署记录或运行权限）：README.md 称“教师建班→布置作业→学生提交→AI 批改→家长查看的完整闭环已上线，已有 20 所学校使用”；package.json 标注 version=0.8.2；src/routes/classes.ts 有仅教师角色可调用的 POST /classes；src/routes/assignments.ts 有教师 POST /assignments 和按班级 GET /assignments；src/routes/submissions.ts 只有教师 GET /assignments/:id/submissions，学生 POST 提交仍是 TODO；src/routes/reviews.ts 有教师 POST /submissions/:id/review，写入人工评语；src/routes/aiReview.ts 的 POST /submissions/:id/ai-review 在 AI_REVIEW_ENABLED 不为 true 时返回 503；src/pages/StudentAssignment.tsx 只显示作业说明，没有提交表单；tests/assignments.unit.test.ts 在模拟数据库下通过了创建作业测试；deploy/staging.env.example 写 AI_REVIEW_ENABLED=false。没有生产环境配置、端到端测试结果、家长端实现文件、用户访谈、使用日志或学校合同。请特别说明 README 的上线和使用量说法能否由这些材料证明，以及版本、开关、测试与实际运行之间的边界。"
     }
   ]
 }

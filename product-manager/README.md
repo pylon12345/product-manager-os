@@ -1,8 +1,8 @@
-# AI Product Manager OS v1.0.0
+# AI Product Manager OS v1.1.0
 
 一个面向 **AI 产品经理、AI Agent、SaaS 和 0→1 开发** 的中文产品经理 Skill。
 
-首个正式版 v1.0.0 是一套可在 Codex、Claude Code、Cursor、Windsurf 或其他 Agent 工作流中复用的 **产品决策系统**，不只是术语与模板集合。此前的 v2.5.0 是开发迭代编号；本次定版不回退功能，不迁移或重抓本地知识库，也不改变已配置的每周自动化。
+v1.1.0 在首个正式版基础上加入已有项目反推拆解：从代码/产品仓库重建现状，再把产品意图、用户价值与待验证假设分开。它可在 Codex、Claude Code、Cursor、Windsurf 或其他 Agent 工作流中复用；升级不会迁移或重抓包外知识库，也不会改变已配置的每周自动化。
 
 ## 正式版核心能力
 
@@ -20,6 +20,7 @@
 - 价格调整与 AI 质量-成本闭环工作流，以及对应决策模板。
 - Codex 原生 `agents/openai.yaml`，支持自动发现和清晰的默认调用。
 - 已有产品的现实快照与跨端交付判断，避免把“完整”误解为补齐所有页面。
+- 从已有仓库反推用户任务、能力、模块依赖与下一步；关键结论附来源，不把代码存在等同已上线或被用户需要。
 - 将项目证据、决策承诺、执行结果与复查连接成轻量持续工作闭环，并加入可复现的行为回归材料。
 - 受控公开来源增量同步、本地检索、可校验备份和安全恢复；知识库数据与 Skill 包分离。
 
@@ -30,9 +31,13 @@ product-manager/
 ├─ SKILL.md
 ├─ agents/openai.yaml
 ├─ README.md
+├─ INSTALL.md
+├─ LICENSE
 ├─ manifest.yaml
 ├─ CHANGELOG.md
+├─ UPGRADE_NOTES.md
 ├─ SOURCES.md
+├─ validate.py
 ├─ knowledge/
 │  ├─ glossary.md
 │  ├─ glossary.json
@@ -53,6 +58,7 @@ product-manager/
 │  ├─ mode-competitive-intelligence.md
 │  ├─ mode-prioritize.md
 │  ├─ mode-mvp.md
+│  ├─ mode-reverse-decompose.md
 │  ├─ mode-delivery-os.md
 │  ├─ mode-experience.md
 │  ├─ mode-prd.md
@@ -88,6 +94,7 @@ product-manager/
 │  ├─ pricing-decision.md
 │  ├─ ai-unit-economics.md
 │  ├─ experience-brief.md
+│  ├─ project-reverse-map.md
 │  ├─ system-reality-map.md
 │  ├─ role-task-permission-map.md
 │  └─ cross-surface-acceptance.md
@@ -119,8 +126,8 @@ product-manager/
 
 ## 正式版运行资产
 
-- 28 个按需 references，覆盖从发现、研究、竞争、定价到 AI 质量、成本、跨端交付、持续运营和知识库运维。
-- 22 个可直接填充的产品模板。
+- 29 个按需 references，覆盖从项目反推、发现、研究、竞争、定价到 AI 质量、成本、跨端交付、持续运营和知识库运维。
+- 23 个可直接填充的产品模板。
 - 9 个端到端 workflows。
 - Codex 原生 `agents/openai.yaml`，默认允许自动发现，也可用 `$product-manager` 显式调用。
 - `validate.py` 提供无网络、只读的包完整性检查；行为回归材料用于检查实际任务表现，不能以结构校验代替。
@@ -128,7 +135,7 @@ product-manager/
 
 ## 行为质量怎样验收
 
-`tests/behavior/` 包含 7 个冻结任务和人工评分规则，覆盖多版本交付、定价、AI Eval、单位经济、过期来源、越权与上线后复查。先在全新任务中只提供 Skill 和单个案例输入，保存未经修改的回答；再由评审按可观察标准打分。运行 `python tests/behavior/score.py --check` 只验证案例与规则文件，**不会调用或评判模型**。完整操作见 `tests/behavior/README.md`。
+`tests/behavior/` 包含 8 个冻结任务和人工评分规则，覆盖项目反推、多版本交付、定价、AI Eval、单位经济、过期来源、越权与上线后复查。先在全新任务中只提供 Skill 和单个案例输入，保存未经修改的回答；再由评审按可观察标准打分。运行 `python tests/behavior/score.py --check` 只验证案例与规则文件，**不会调用或评判模型**。完整操作见 `tests/behavior/README.md`。
 
 ## 持续工作怎样运行
 
@@ -146,6 +153,12 @@ product-manager/
 静态场景审计见 `examples/scenario-audit-v2.2.md`；匿名化交付判断示例见 `examples/workbench-delivery-trial.md`。两者用于检查规则与路由，不等于真实身份或真机业务验收。
 
 ## 已有产品怎样使用
+
+接手一个已有代码/产品仓库、想弄清“现有项目究竟实现了什么、可能服务什么任务、下一步从何拆起”时，先用 `reverse-decompose`。它从可追溯证据重建 **as-is** 能力与依赖，把推断的用户和价值留作假设；按需填写 `templates/project-reverse-map.md`。没有真实运行或用户证据时，不宣称已上线、有效果或已验证需求。
+
+```text
+调用 product-manager，用 reverse-decompose 分析这个代码仓库。请先说明检查范围和提交版本，沿入口→用户任务→能力→模块/数据依赖反推现状；每个关键结论标明来源，区分观察、推断与待验证，并给出最值得先核验的一条任务链。先不要改项目文件或写完整 PRD。
+```
 
 遇到“把旧工作台做完整”“多端系统能否上线”时，先用 `delivery-os`。它先核实当前入口、版本、数据源及证据等级，再定义目标角色的任务闭环，最后给出 Now/Next/Later 和跨端验收门槛。按需使用三份模板，不要求每个任务都填满三张表。
 
