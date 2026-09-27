@@ -1,9 +1,9 @@
 ---
 name: product-manager
-description: 中文 AI Product Manager OS。用于产品发现、已有项目反推拆解、用户研究、竞品情报、优先级、MVP、产品体验、PRD、定价、AI 架构与 Eval、单位经济、研发交接、上线和复盘。按任务路由并区分事实与假设；纯视觉制作与高保真 UI 实现交由设计或开发工作流。
+description: 中文 AI Product Manager OS。用于产品发现、已有项目反推拆解、用户研究、竞品情报、优先级、MVP、产品体验、PRD、定价、AI 架构与 Eval、单位经济、研发交接、上线复盘及 Skill 自身的受控改进。按任务路由并区分事实与假设；纯视觉制作与高保真 UI 实现交由设计或开发工作流。
 ---
 
-# Product Manager Skill v1.1.0
+# Product Manager Skill v1.2.0
 
 这是一个面向 **AI Product / Agent / SaaS / 0→1** 的产品经理工作系统。目标不是产出更多文档，而是减少错误决策、缩短验证路径，并把经过验证的需求交付给研发。
 
@@ -69,6 +69,7 @@ description: 中文 AI Product Manager OS。用于产品发现、已有项目反
 | AI 成本、预算、模型路由、单位经济 | `ai-economics` | `references/mode-ai-economics.md` |
 | 上线检查、灰度、监控 | `launch` | `references/mode-launch.md` |
 | 上线后复盘、决策校准 | `retro` | `references/mode-retro.md` |
+| 复盘本 Skill 的坏例、提出候选修改或版本改进 | `improve-os` | `references/mode-improve-os.md` |
 | 面试、项目表达、案例复盘 | `interview` | `references/mode-interview.md` |
 | 名词解释 | `glossary` | `knowledge/glossary.md` / `.json` |
 | 同步、检索、备份或恢复本地知识库 | `knowledge-ops` | `references/knowledge-base-ops.md` |
@@ -80,6 +81,8 @@ description: 中文 AI Product Manager OS。用于产品发现、已有项目反
 `delivery-os` 适用于已有产品的跨端交付判断。它可调用 `templates/system-reality-map.md`、`templates/role-task-permission-map.md`、`templates/cross-surface-acceptance.md`，但仅在对应缺口影响决策时使用；不要为简单功能请求制造三份文档。
 
 `reverse-decompose` 适用于接手已有项目、从仓库反推产品现状与任务拆解。静态代码只证明实现线索，不证明已部署、真实用户需求或业务效果；按需使用 `templates/project-reverse-map.md`，再把上线判断、优先级或新规格交给对应模式。
+
+`improve-os` 只在用户要求改进本 Skill 或发现具体坏例时使用。按 `workflows/skill-improvement-loop.md` 登记、归因、提出最小改动，用同一冻结案例让新旧版分别接受人工评审；评分器不运行或评判模型。私有资料不得自动进入公开测试或仓库；候选修改须在用户授权范围内，安装、推送和发布各自核对权限，对外发布还须维护者审批。项目自身的产品迭代仍走 `retro` / `references/operating-loop.md`。
 
 体验设计的职责边界：本 Skill 定义用户任务、流程、信息优先级、状态、文案原则、可用性假设与验收；视觉风格、高保真稿、组件细节和前端实现由相应设计或开发能力承担。用户明确要求实际 UI 产物时，在完成产品侧约束后继续调用可用的设计或开发工作流。
 
