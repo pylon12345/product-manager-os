@@ -14,7 +14,7 @@
 | 你想做什么 | 阅读入口 |
 |---|---|
 | 了解定位、方法、架构与能力边界 | [专业介绍与产品运营指南](PRODUCT_MANAGER_OS_GUIDE.md) |
-| 安装并完成第一次调用 | [安装与升级](product-manager/INSTALL.md) |
+| 安装并完成第一次调用 | [Codex／Claude／WorkBuddy 安装与升级](product-manager/INSTALL.md) |
 | 查常用指令、25 个模式与详细步骤 | [详细使用说明](product-manager/USER_GUIDE.md) |
 | 按一个案例练习从需求到验收 | [电商 AI 客服演练](product-manager/examples/ecommerce-customer-service.md) |
 | 查看运行规则或本次修复 | [SKILL.md](product-manager/SKILL.md) · [CHANGELOG](product-manager/CHANGELOG.md) |
@@ -44,7 +44,7 @@ python product-manager/validate.py
 
 按[安装说明](product-manager/INSTALL.md)安装完整的 `product-manager/` 目录。Python 3.10+ 用于校验、离线测试和可选知识库工具；纯指令调用不要求 Python 或本仓库的 API Key。
 
-首次调用示例：
+首次调用示例（Codex）：
 
 ```text
 $product-manager
@@ -54,7 +54,7 @@ $product-manager
 给最小验证、成功标准、停止条件和下一动作，不要编造数据。
 ```
 
-也可在宿主的技能界面选择 `product-manager`，或写“调用 product-manager”。需要生成文件时，明确目标目录与授权范围。完整操作见[使用说明](product-manager/USER_GUIDE.md)。
+Claude Code 使用 `/product-manager`；Claude 网页／桌面端和 WorkBuddy 按安装说明导入并启用 ZIP，再自然语言指定本技能。需要生成文件时，明确目标目录与授权范围。完整操作见[使用说明](product-manager/USER_GUIDE.md)。
 
 ## 工作方式
 

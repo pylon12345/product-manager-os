@@ -6,7 +6,7 @@
 
 ## 文档导航
 
-- [安装与升级](INSTALL.md)：完整目录安装、调用确认、升级和故障排查。
+- [安装与升级](INSTALL.md)：Codex、Claude Code、Claude 网页／桌面端与 WorkBuddy 的安装、调用确认、升级和排错。
 - [详细使用说明](USER_GUIDE.md)：输入准备、25 个模式、常用指令、连续项目与知识库操作。
 - [电商 AI 客服演练](examples/ecommerce-customer-service.md)：从问题验证到 PRD、Eval 与上线决定。
 - [主入口](SKILL.md)：Agent 执行规则、路由和按需资源。
@@ -26,6 +26,8 @@
 包内包含 25 个模式、23 个模板、9 个工作流与 100 个术语。只加载当前任务需要的文件，不把整个知识目录注入每轮上下文。
 
 ## 第一次调用
+
+下例使用 Codex 语法；Claude Code 改为 `/product-manager`，Claude／WorkBuddy 使用自然语言指定已安装技能。
 
 ```text
 $product-manager
