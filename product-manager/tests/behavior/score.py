@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import sys
 
 BASE = Path(__file__).resolve().parent
@@ -52,10 +53,18 @@ def fixture_hash():
     return hashlib.sha256(payload).hexdigest()
 
 
+def current_skill_version():
+    manifest = (BASE.parents[1] / "manifest.yaml").read_text(encoding="utf-8")
+    match = re.search(r"(?m)^version:\s*(\d+\.\d+\.\d+)\s*$", manifest)
+    if match is None:
+        raise ValueError("manifest needs a valid release version")
+    return match.group(1)
+
+
 def skeleton(cases, rubric):
     return {
         "run": {
-            "skill_version": "1.1.0",
+            "skill_version": current_skill_version(),
             "model": "FILL_ME",
             "date": "YYYY-MM-DD",
             "evaluator": "FILL_ME",

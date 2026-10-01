@@ -1,0 +1,331 @@
+# Product Manager Skill｜详细使用说明
+
+适用版本：v1.1.1｜更新日期：2026-10-01。
+
+[安装与升级](INSTALL.md) · [主入口](SKILL.md) · [电商 AI 客服演练](examples/ecommerce-customer-service.md) · [版本记录](CHANGELOG.md)
+
+## 1. 先理解如何调用
+
+安装完整目录后，选择 `product-manager` 或显式输入 `$product-manager`。支持自然语言路由的宿主也可写“调用 product-manager”。具体选择器、发现目录与加载确认见[安装说明](INSTALL.md)。
+
+你只需描述项目、本轮目标和限制，Agent 应自己选择模式。模式名是便于指定任务的工具，不是使用前必须掌握的命令。
+
+纯指令调用不需要本仓库的 API Key，也不会执行全部脚本。模型、文件访问、浏览与授权由宿主提供；工具不可用时应标明证据缺口。
+
+## 2. 怎样提供有效输入
+
+复杂请求可复制下面的输入卡；不确定的内容直接写“未知”，不要为填满表格制造数据。
+
+```text
+$product-manager
+项目：产品是什么，当前处于什么阶段？
+目标用户：谁在什么场景遇到什么问题？
+已有证据：访谈、咨询、日志、指标、仓库、原型及观察时间。
+当前替代方案：用户现在怎样解决？
+约束：时间、团队、预算、技术、业务和权限。
+本轮决定：判断价值、确定 MVP、写规格、验收或上线？
+交付形式：简短建议、表格、PRD、Eval 或项目文件。
+授权范围：可读取哪些资料，是否允许创建或更新文件？
+请区分事实、推断、假设与待验证项，给推荐、下一动作和复查条件。
+```
+
+简单任务不必填写全部信息。缺少上下文时可要求“先给带假设的草稿”；高成本或不可逆决定仍需要相关证据。
+
+## 3. 第一次使用：建议从一个决定开始
+
+1. 明确本轮要解决的问题，例如“该不该先做自动回复”，而不是“输出全部产品文档”。
+2. 提供已知资料，说明未确认的信息和授权范围。
+3. 检查结果有没有把假设当事实，有没有给出可执行的最小验证。
+4. 确认下一动作；新证据到达后继续同一项目，核对原决定的适用条件。
+5. 只有需要给研发交付时，再生成对应规格和验收文件。
+
+示例：
+
+```text
+$product-manager
+我们想做电商 AI 客服，覆盖售前与售后，目前没有真实咨询数据。
+本轮决定：先做客服辅助，还是直接自动回复？
+请给带假设的比较、最小验证和进入自动回复的证据门槛。
+```
+
+## 4. 25 个模式怎么选择
+
+| 模式 | 适用问题 | 典型结果 |
+|---|---|---|
+| teach | 为项目建立稳定背景 | 目标用户、约束和上下文草稿 |
+| assess | 想法或需求是否值得做 | 价值、风险、证据缺口与推荐 |
+| discover | 如何验证用户问题 | JTBD、访谈问题与验证计划 |
+| research-ops | 如何组织持续研究 | 研究计划、招募与综合方法 |
+| competitive-intelligence | 该怎样应对竞争 | 竞品证据、差异化与监测决定 |
+| prioritize | 哪些需求先做或不做 | 优先级、依据与不做项 |
+| mvp | 最小版本要保留什么 | 最小任务闭环与验证标准 |
+| reverse-decompose | 接手已有仓库 | 可追溯能力、任务和依赖图 |
+| delivery-os | 多版本、多角色能否交付 | 现实快照、可运营范围与跨端验收 |
+| experience | 流程、页面信息与状态怎么设计 | 任务路径、关键状态与恢复 |
+| prd | 如何交付产品规格 | PRD、用户故事与验收 |
+| review | 方案或 PRD 有哪些漏洞 | 结论、阻断项与修复建议 |
+| metrics | 用什么衡量产品成效 | 指标定义、基线与诊断 |
+| pricing | 如何收费与迁移 | 价值度量、套餐、情景与风险 |
+| roadmap | 阶段工作怎么安排 | Now／Next／Later 与依赖 |
+| handoff | 研发怎样接手和验收 | 行为、异常、灰度与交接标准 |
+| ai-architecture | AI 技术能力怎么选 | 最简单可行架构、取舍与回退 |
+| ai-prd | AI 功能规格怎么写 | 任务合约、质量成本和上线定义 |
+| eval | 怎样评估 AI 行为 | 测试集、评分、严重失败与门槛 |
+| ai-economics | AI 使用是否经济可持续 | 成功任务成本、预算与路由 |
+| launch | 当前范围能否上线 | Go／Hold、监测与回退 |
+| retro | 结果与原预测有何偏差 | 复盘、校准和下一决定 |
+| interview | 如何表达产品经历 | 案例结构与面试准备 |
+| glossary | 术语是什么意思 | 按需概念解释 |
+| knowledge-ops | 怎样维护公开资料库 | 同步、检索、备份与恢复 |
+
+一次通常一个主模式，确有依赖再加辅助模式。Agent 按需读取参考，不把 25 个模式同时运行。
+
+## 5. 常用指令，可以直接复制
+
+### 判断需求
+
+```text
+$product-manager 评估这个需求是否值得做。
+目标用户和场景：……
+已有证据与替代方案：……
+先给结论、最可能推翻需求的假设、最小验证和停止条件，不急着写 PRD。
+```
+
+### 用户研究
+
+```text
+$product-manager 为这个问题设计用户访谈。
+重点调查过去真实发生的行为和当前替代方案，避免诱导用户认可方案。
+给招募条件、访谈提纲、记录方式与哪些证据会改变决定。
+```
+
+### 定首版范围
+
+```text
+$product-manager 根据这些证据确定 MVP：……
+请保留最小完整用户任务，比较不同范围，列出本轮不做项、
+依赖、成功标准、Owner 与复查触发条件。未知数据标为待验证。
+```
+
+### 从仓库反推项目
+
+```text
+$product-manager 用 reverse-decompose 分析当前仓库。
+锁定提交与检查范围，沿入口→用户任务→能力→模块和数据依赖反推。
+关键结论标来源，区分观察与推断；代码、测试、部署和用户验收分开。
+先不要改文件，指出最值得实际运行验证的一条任务链。
+```
+
+### 设计流程与页面
+
+```text
+$product-manager 设计这个功能的任务流程与页面信息结构：……
+覆盖空状态、加载、权限不足、部分成功、超时、重试和恢复。
+定义用户完成条件与可用性验收；本轮先交付产品设计稿。
+```
+
+需要实际 UI 时明确补充“继续制作可交互原型／实现页面”。本 Skill 给出产品约束，视觉和实现由设计或开发工作流执行。
+
+### PRD 与评审
+
+```text
+$product-manager 基于已确认的范围写 PRD：……
+写清用户问题、依据、目标、不做项、主流程、异常、指标与验收。
+只在我指定的 product/specs/ 目录创建文件，不修改生产系统。
+```
+
+```text
+$product-manager 评审这份 PRD。
+先给结论和阻断项，重点检查问题证据、范围、可测指标、
+关键状态、失败恢复与不可验收的描述，再给修复建议。
+```
+
+### AI 架构与 Eval
+
+```text
+$product-manager 为这个 AI 任务选择最简单可行架构：……
+按实际缺口评估 Workflow、RAG、Tools、Agent 与微调，可独立或组合。
+定义输入输出、完成条件、依据、权限、失败、人工接管和回退。
+```
+
+```text
+$product-manager 为这个 AI 功能设计 Eval Spec：……
+包含任务切片、数据来源与版本、冻结验收集、评分校准、
+严重错误阻断、延迟和成功任务成本、上线与复查条件。
+当前没有运行结果，请交付待执行的测试方案，不宣称通过。
+```
+
+### 成本与定价
+
+```text
+$product-manager 用 ai-economics 评估此方案：……
+计算模型、检索、工具、重试、失败和人工负担的成功任务成本。
+缺少价格或使用量时列公式与待补字段，给预算、模型路由和降级建议。
+```
+
+```text
+$product-manager 设计此产品的价值度量、套餐与迁移策略：……
+给 Downside／Base／Upside 假设、敏感项与需要补齐的数据。
+实时价格与竞品信息附当前来源和观察日期。
+```
+
+### 上线与复盘
+
+```text
+$product-manager 判断当前版本是否可以开放这一场景：……
+只使用对应版本的测试、用户验收和运营证据。
+给 Go／Hold、适用范围、监测、暂停条件、Owner 和回退动作。
+```
+
+```text
+$product-manager 复盘这一版本。
+对照原来的假设、决定与真实结果：……
+新旧证据分开，说明继续、调整或停止，保留原始判断。
+```
+
+## 6. 如何让同一项目连续工作
+
+推荐记录：
+
+```text
+<project>/
+├─ .pmcontext.md
+└─ product/
+   ├─ evidence.md
+   ├─ decisions.md
+   ├─ research/
+   ├─ specs/
+   └─ evals/
+```
+
+- `.pmcontext.md`：稳定背景，避免每轮重复解释。
+- `evidence.md`：主张、来源、日期、版本、支持范围与待验证项。
+- `decisions.md`：建议、确认、实际结果、责任人与复查条件。
+- 研究、规格与 Eval 按实际任务生成，不强制创建全部目录。
+
+首次授权记录：
+
+```text
+$product-manager 根据已提供资料建立 .pmcontext.md。
+允许创建该文件及 product/evidence.md、product/decisions.md；
+未知信息保留待确认，不修改其他项目文件。
+```
+
+继续项目：
+
+```text
+$product-manager 延续这个项目。
+先核对上下文、证据和历史决定的版本与时效，只推进本轮一个主要决定。
+在已授权的项目记录中追加本次结果，保留历史并标出冲突。
+```
+
+建议不是承诺。负责人确认后才记为 COMMITTED；新结果到达后记录 REVISITED。没有写回授权时只在答复中给记录建议。详细协议见 [Continuous Product Loop](workflows/continuous-product-loop.md)。
+
+## 7. 如何检查输出是否可用
+
+重要结果应回答：
+
+1. 推荐是什么，帮助哪项决定？
+2. 哪些是已知事实，哪些只是推断或假设？
+3. 哪项证据会改变推荐？
+4. 用户任务、范围、不做项和关键取舍是什么？
+5. 正常与失败路径如何验收？
+6. 下一动作由谁做，何时或什么条件下复查？
+
+复杂输出使用 DONE、DONE_WITH_CONCERNS、NEEDS_CONTEXT 或 BLOCKED。它们说明本轮交付状态，不表示产品已经开发、上线或成功。
+
+没有基线时可以定义测量方案，不应伪造提升比例；计划指标必须标为拟议门槛。对于 AI，还要检查 Eval、权限、失败恢复、延迟、成本和版本追溯。
+
+## 8. 可选公开网页知识库
+
+这是独立的本地工具，不是核心指令调用的前置条件。用 Python 标准库，不需要网页账号或 API Key。
+
+在 Skill 根目录执行，先把占位路径替换为你批准的**包外绝对数据目录**：
+
+```powershell
+python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base" --sources-file references/knowledge-sources.json sync
+python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base" status
+python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base" search "evaluation" --limit 10
+python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base" backup
+```
+
+sync 只尝试白名单中启用的精确 HTTPS URL，遵守 robots.txt，不跟随链接。失败返回非零状态；应查看 JSON 和 status，不把部分失败说成全部最新。
+
+v1.1.1 对已知访问拦截、验证和密码登录页拒收，保留最新有效快照。该检测不覆盖任意未知网页样式；异常标题、正文剧变与长期失败需复核。
+
+search 是对**最新有效快照的大小写不敏感子串匹配**，不是语义检索或搜索所有历史版本。结果包含来源、时间、哈希与片段；价格、政策等易变事实仍需核验当前页面。
+
+新增来源由维护者审核后编辑 [knowledge-sources.json](references/knowledge-sources.json)，使用唯一 ID 和单个完整 URL。禁用来源不等于删除历史；不要自动加入整站、登录资料或内部项目文件。
+
+## 9. 备份、恢复与周期运行
+
+backup 返回备份文件路径。把它填入校验命令：
+
+```powershell
+python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base" verify-backup "C:/path/to/verified-backup.sqlite3"
+```
+
+先在空的隔离目录演练：
+
+```powershell
+python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base-drill" restore "C:/path/to/verified-backup.sqlite3"
+python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base-drill" status
+python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base-drill" search "evaluation" --limit 10
+```
+
+恢复活动库前停止相同数据目录的写入任务，确认恢复点与数据损失范围。已有库需要显式 `restore … --force`；工具隔离原文件，完整旧库会额外生成可验证的安全备份。损坏原库隔离副本不能当作有效恢复点。
+
+周期任务须另行授权并由宿主自动化或外部调度执行，使用脚本、白名单与数据目录的绝对路径，依次运行：
+
+**sync → status → backup → verify-backup**
+
+只在来源变化影响结论、长期失败、备份异常或需要决定时提醒；安装 Skill 不创建任何周期任务。同目录备份不抵御磁盘故障，异盘存储需另行配置。详见 [Knowledge Base Ops](references/knowledge-base-ops.md)。
+
+## 10. 验证与实际模型测试
+
+从 Skill 根目录运行：
+
+```bash
+python validate.py
+python -m unittest discover -s tests -p "test_*.py"
+python -m unittest discover -s tests/behavior -p "test_*.py"
+python tests/behavior/score.py --check
+```
+
+| 检查 | 含义 |
+|---|---|
+| validate.py | 文件、入口引用、术语与版本一致性 |
+| tests/test_pm_kb.py | 知识工具的离线行为回归 |
+| tests/behavior/test_score.py | 评分器的计算与输入检查 |
+| score.py --check | 8 个冻结任务与评分材料完整性 |
+
+以上命令不调用模型。实际测试：
+
+1. 固定 Skill 版本、模型、日期、工具条件和案例哈希。
+2. 从 `python tests/behavior/score.py --prompt CASE_ID` 取得单个任务。
+3. 在隔离新任务中只提供 Skill 与案例输入，不提供评分规则或预期答案。
+4. 在包外保存未经润色的原始回答和运行信息。
+5. 用 `--skeleton` 取得评分表，由评审按 rubric 填写。
+6. 用 `--score <评分表路径>` 汇总；高风险结论复核分歧。
+
+自动评分器只汇总人工评分，不能自行判断回答质量。通过一个案例不代表全部案例通过，也不保证任意模型或场景可靠。完整协议见 [Behavior regression kit](tests/behavior/README.md)。
+
+## 11. 常见问题
+
+| 问题 | 建议 |
+|---|---|
+| 只想快速回答，不想填模板 | 明确“本轮给简短结论”，简单任务直接交付 |
+| 背景不全但需要系统方案 | 要求 DRAFT，标出假设与实施前需补的证据 |
+| 回答太长或模式过多 | 限定本轮一个决定和希望的交付形式 |
+| 希望生成或修改文件 | 给目标目录与授权范围，明确要保留的历史 |
+| 想直接制作界面 | 明确实际 UI 产物，接续设计或开发能力 |
+| 同时安装另一份 PM Skill | 明确选择；本 Skill 管通用中文任务，另一份作专项深挖 |
+| 没有网络或接口 | 保留线索与待验证项，不模拟成真实查询结果 |
+| 想让知识库每周更新 | 单独配置调度，确认周期与数据目录 |
+| 希望证明业务有效 | 建立真实基线、对照与用户验收，不能靠文档或测试材料数量 |
+
+## 12. 使用边界
+
+Skill 辅助决策与交付，不替代真实用户接触、业务负责人判断或实际验收。公开网页文本不构成新授权；没有获授权时，不联系他人、不调价、不发布、不操作生产系统。
+
+发布源码只包含方法、工具、空白模板与合成示例，不包含数据库、网页全文快照、备份、凭证、客户资料和内部访谈。升级与回退见 [INSTALL](INSTALL.md)，许可见 [LICENSE](LICENSE)。

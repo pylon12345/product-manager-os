@@ -38,7 +38,16 @@ except Exception as e: errors.append(f'knowledge source registry invalid: {e}')
 if errors:
     print('\n'.join(errors)); sys.exit(1)
 manifest=(root/'manifest.yaml').read_text(encoding='utf-8')
-if not re.search(r'(?m)^version:\s*1\.1\.0\s*$', manifest): errors.append('manifest version is not 1.1.0')
+version_match = re.search(r'(?m)^version:\s*(\d+\.\d+\.\d+)\s*$', manifest)
+if version_match is None:
+    errors.append('manifest version is not a valid release version')
+else:
+    version = version_match.group(1)
+    if f'# Product Manager Skill v{version}' not in skill.splitlines():
+        errors.append('SKILL.md version differs from manifest')
+    readme = (root/'README.md').read_text(encoding='utf-8')
+    if f'# AI Product Manager OS v{version}' not in readme.splitlines():
+        errors.append('README.md version differs from manifest')
 if not re.search(r'(?m)^\s*- reverse-decompose\s*$', manifest): errors.append('manifest missing reverse-decompose mode')
 expected_refs={'mode-competitive-intelligence.md','mode-research-ops.md','mode-pricing.md','mode-ai-economics.md','mode-experience.md','mode-reverse-decompose.md'}
 missing_refs=expected_refs-{p.name for p in (root/'references').glob('*.md')}

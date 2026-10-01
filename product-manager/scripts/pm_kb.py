@@ -498,6 +498,25 @@ BLOCK_TAGS = {
 }
 SKIP_TAGS = {"script", "style", "noscript", "nav", "header", "footer", "aside", "form", "svg"}
 
+# Match page-level messages, not mentions inside otherwise useful articles.
+INTERSTITIAL_MESSAGE = re.compile(
+    r"^(?:access denied|request (?:blocked|rejected)|403(?: forbidden)?|forbidden|"
+    r"service unavailable|just a moment|attention required|"
+    r"(?:please )?verify (?:that )?you are (?:a )?human|"
+    r"checking your browser|security (?:check|verification)|robot check|"
+    r"are you a robot\??|authentication required|"
+    r"sign in to .+|log in to .+|"
+    r"访问被拒绝|拒绝访问|访问受限|请求被拦截|安全验证|人机验证|"
+    r"(?:请|请先|需要)登录|验证您是人类)"
+    r"(?:\s*[:|!.…\-–—].*)?$",
+    re.IGNORECASE,
+)
+LOGIN_MESSAGE = re.compile(
+    r"^(?:sign in|log in|login|登录|用户登录|账户登录|账号登录)"
+    r"(?:\s*[:|!.…\-–—].*)?$",
+    re.IGNORECASE,
+)
+
 
 class ReadableText(HTMLParser):
     def __init__(self) -> None:
@@ -505,11 +524,23 @@ class ReadableText(HTMLParser):
         self.skip_depth = 0
         self.main_depth = 0
         self.title_depth = 0
+        self.heading_depth = 0
+        self.heading_seen = False
+        self.has_password_input = False
         self.all_parts: list[str] = []
         self.main_parts: list[str] = []
         self.title_parts: list[str] = []
+        self.heading_parts: list[str] = []
 
     def handle_starttag(self, tag: str, attrs) -> None:  # noqa: ANN001
+        if tag == "input" and any(
+            key.lower() == "type" and (value or "").lower() == "password"
+            for key, value in attrs
+        ):
+            self.has_password_input = True
+        if tag == "h1" and not self.heading_seen and not self.skip_depth:
+            self.heading_seen = True
+            self.heading_depth = 1
         if tag in SKIP_TAGS:
             self.skip_depth += 1
         if tag in ("main", "article"):
@@ -522,6 +553,8 @@ class ReadableText(HTMLParser):
                 self.main_parts.append("\n")
 
     def handle_endtag(self, tag: str) -> None:
+        if tag == "h1":
+            self.heading_depth = 0
         if tag in BLOCK_TAGS and not self.skip_depth:
             self.all_parts.append("\n")
             if self.main_depth:
@@ -538,6 +571,8 @@ class ReadableText(HTMLParser):
             self.title_parts.append(data)
         if self.skip_depth:
             return
+        if self.heading_depth:
+            self.heading_parts.append(data)
         if data.strip():
             self.all_parts.append(data)
             if self.main_depth:
@@ -547,6 +582,21 @@ class ReadableText(HTMLParser):
 def normalize_text(parts: list[str]) -> str:
     lines = [re.sub(r"\s+", " ", line).strip() for line in " ".join(parts).splitlines()]
     return "\n".join(line for line in lines if line)[:MAX_TEXT_CHARS]
+
+
+def reject_interstitial(reader: ReadableText) -> None:
+    """Fail closed on known gate pages; never scan article body for keywords."""
+    messages = (
+        " ".join(" ".join(reader.title_parts).split()),
+        " ".join(" ".join(reader.heading_parts).split()),
+    )
+    password_gate = reader.has_password_input and any(
+        LOGIN_MESSAGE.fullmatch(message) for message in messages if message
+    )
+    if password_gate or any(
+        INTERSTITIAL_MESSAGE.fullmatch(message) for message in messages if message
+    ):
+        raise KBError("page is an access, verification, or login gate; no snapshot saved")
 
 
 def extract_text(body: bytes, content_type: str, fallback_title: str) -> tuple[str, str]:
@@ -565,6 +615,7 @@ def extract_text(body: bytes, content_type: str, fallback_title: str) -> tuple[s
     else:
         reader = ReadableText()
         reader.feed(decoded)
+        reject_interstitial(reader)
         main_text = normalize_text(reader.main_parts)
         text = main_text if len(main_text) >= MIN_TEXT_CHARS else normalize_text(reader.all_parts)
         title = " ".join(reader.title_parts).strip() or fallback_title
