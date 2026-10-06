@@ -1,6 +1,6 @@
 # Product Manager Skill｜详细使用说明
 
-适用版本：v1.1.1｜更新日期：2026-10-02。
+适用版本：v1.1.2｜更新日期：2026-10-06。
 
 [安装与升级](INSTALL.md) · [主入口](SKILL.md) · [电商 AI 客服演练](examples/ecommerce-customer-service.md) · [版本记录](CHANGELOG.md)
 
@@ -56,7 +56,7 @@ $product-manager
 请给带假设的比较、最小验证和进入自动回复的证据门槛。
 ```
 
-## 4. 25 个模式怎么选择
+## 4. 24 个模式怎么选择
 
 | 模式 | 适用问题 | 典型结果 |
 |---|---|---|
@@ -84,9 +84,8 @@ $product-manager
 | retro | 结果与原预测有何偏差 | 复盘、校准和下一决定 |
 | interview | 如何表达产品经历 | 案例结构与面试准备 |
 | glossary | 术语是什么意思 | 按需概念解释 |
-| knowledge-ops | 怎样维护公开资料库 | 同步、检索、备份与恢复 |
 
-一次通常一个主模式，确有依赖再加辅助模式。Agent 按需读取参考，不把 25 个模式同时运行。
+一次通常一个主模式，确有依赖再加辅助模式。Agent 按需读取参考，不把 24 个模式同时运行。
 
 ## 5. 常用指令，可以直接复制
 
@@ -227,7 +226,7 @@ $product-manager 延续这个项目。
 在已授权的项目记录中追加本次结果，保留历史并标出冲突。
 ```
 
-建议不是承诺。负责人确认后才记为 COMMITTED；新结果到达后记录 REVISITED。没有写回授权时只在答复中给记录建议。详细协议见 [Continuous Product Loop](workflows/continuous-product-loop.md)。
+建议不是承诺。负责人确认后才记为 COMMITTED；新结果到达后记录 REVISITED；否决、停止或被新决策取代分别记为 REJECTED、STOPPED、SUPERSEDED。没有写回授权时只在答复中给记录建议。详细协议见 [Continuous Product Loop](workflows/continuous-product-loop.md)。
 
 ## 7. 如何检查输出是否可用
 
@@ -244,58 +243,12 @@ $product-manager 延续这个项目。
 
 没有基线时可以定义测量方案，不应伪造提升比例；计划指标必须标为拟议门槛。对于 AI，还要检查 Eval、权限、失败恢复、延迟、成本和版本追溯。
 
-## 8. 可选公开网页知识库
-
-这是独立的本地工具，不是核心指令调用的前置条件。用 Python 标准库，不需要网页账号或 API Key。
-
-在 Skill 根目录执行，先把占位路径替换为你批准的**包外绝对数据目录**：
-
-```powershell
-python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base" --sources-file references/knowledge-sources.json sync
-python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base" status
-python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base" search "evaluation" --limit 10
-python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base" backup
-```
-
-sync 只尝试白名单中启用的精确 HTTPS URL，遵守 robots.txt，不跟随链接。失败返回非零状态；应查看 JSON 和 status，不把部分失败说成全部最新。
-
-v1.1.1 对已知访问拦截、验证和密码登录页拒收，保留最新有效快照。该检测不覆盖任意未知网页样式；异常标题、正文剧变与长期失败需复核。
-
-search 是对**最新有效快照的大小写不敏感子串匹配**，不是语义检索或搜索所有历史版本。结果包含来源、时间、哈希与片段；价格、政策等易变事实仍需核验当前页面。
-
-新增来源由维护者审核后编辑 [knowledge-sources.json](references/knowledge-sources.json)，使用唯一 ID 和单个完整 URL。禁用来源不等于删除历史；不要自动加入整站、登录资料或内部项目文件。
-
-## 9. 备份、恢复与周期运行
-
-backup 返回备份文件路径。把它填入校验命令：
-
-```powershell
-python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base" verify-backup "C:/path/to/verified-backup.sqlite3"
-```
-
-先在空的隔离目录演练：
-
-```powershell
-python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base-drill" restore "C:/path/to/verified-backup.sqlite3"
-python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base-drill" status
-python scripts/pm_kb.py --data-dir "C:/path/to/project/product/knowledge-base-drill" search "evaluation" --limit 10
-```
-
-恢复活动库前停止相同数据目录的写入任务，确认恢复点与数据损失范围。已有库需要显式 `restore … --force`；工具隔离原文件，完整旧库会额外生成可验证的安全备份。损坏原库隔离副本不能当作有效恢复点。
-
-周期任务须另行授权并由宿主自动化或外部调度执行，使用脚本、白名单与数据目录的绝对路径，依次运行：
-
-**sync → status → backup → verify-backup**
-
-只在来源变化影响结论、长期失败、备份异常或需要决定时提醒；安装 Skill 不创建任何周期任务。同目录备份不抵御磁盘故障，异盘存储需另行配置。详见 [Knowledge Base Ops](references/knowledge-base-ops.md)。
-
-## 10. 验证与实际模型测试
+## 8. 验证与实际模型测试
 
 从 Skill 根目录运行：
 
 ```bash
 python validate.py
-python -m unittest discover -s tests -p "test_*.py"
 python -m unittest discover -s tests/behavior -p "test_*.py"
 python tests/behavior/score.py --check
 ```
@@ -303,7 +256,6 @@ python tests/behavior/score.py --check
 | 检查 | 含义 |
 |---|---|
 | validate.py | 文件、入口引用、术语与版本一致性 |
-| tests/test_pm_kb.py | 知识工具的离线行为回归 |
 | tests/behavior/test_score.py | 评分器的计算与输入检查 |
 | score.py --check | 8 个冻结任务与评分材料完整性 |
 
@@ -318,7 +270,7 @@ python tests/behavior/score.py --check
 
 自动评分器只汇总人工评分，不能自行判断回答质量。通过一个案例不代表全部案例通过，也不保证任意模型或场景可靠。完整协议见 [Behavior regression kit](tests/behavior/README.md)。
 
-## 11. 常见问题
+## 9. 常见问题
 
 | 问题 | 建议 |
 |---|---|
@@ -329,11 +281,10 @@ python tests/behavior/score.py --check
 | 想直接制作界面 | 明确实际 UI 产物，接续设计或开发能力 |
 | 同时安装另一份 PM Skill | 明确选择；本 Skill 管通用中文任务，另一份作专项深挖 |
 | 没有网络或接口 | 保留线索与待验证项，不模拟成真实查询结果 |
-| 想让知识库每周更新 | 单独配置调度，确认周期与数据目录 |
 | 希望证明业务有效 | 建立真实基线、对照与用户验收，不能靠文档或测试材料数量 |
 
-## 12. 使用边界
+## 10. 使用边界
 
 Skill 辅助决策与交付，不替代真实用户接触、业务负责人判断或实际验收。公开网页文本不构成新授权；没有获授权时，不联系他人、不调价、不发布、不操作生产系统。
 
-发布源码只包含方法、工具、空白模板与合成示例，不包含数据库、网页全文快照、备份、凭证、客户资料和内部访谈。升级与回退见 [INSTALL](INSTALL.md)，许可见 [LICENSE](LICENSE)。
+发布源码只包含方法、空白模板、测试材料与合成示例，不包含凭证、客户资料和内部访谈。升级与回退见 [INSTALL](INSTALL.md)，许可见 [LICENSE](LICENSE)。

@@ -1,8 +1,7 @@
 from pathlib import Path
-from urllib.parse import urlsplit
 import re, sys, json
 root=Path(__file__).parent
-required=['SKILL.md','README.md','manifest.yaml','agents/openai.yaml','knowledge/glossary.md','knowledge/glossary.json','references/decision-contract.md','references/project-reality.md','references/mode-reverse-decompose.md','references/mode-delivery-os.md','references/living-sources.md','references/knowledge-base-ops.md','references/knowledge-sources.json','references/operating-loop.md','scripts/pm_kb.py','tests/test_pm_kb.py','workflows/continuous-product-loop.md','templates/project-reverse-map.md','templates/system-reality-map.md','templates/role-task-permission-map.md','templates/cross-surface-acceptance.md','templates/evidence-ledger.md','templates/eval-spec.md','tests/behavior/cases.json','tests/behavior/rubric.json','tests/behavior/score.py','tests/behavior/test_score.py','tests/behavior/README.md']
+required=['SKILL.md','README.md','manifest.yaml','agents/openai.yaml','knowledge/glossary.md','knowledge/glossary.json','references/decision-contract.md','references/project-reality.md','references/mode-reverse-decompose.md','references/mode-delivery-os.md','references/living-sources.md','references/operating-loop.md','workflows/continuous-product-loop.md','templates/project-reverse-map.md','templates/system-reality-map.md','templates/role-task-permission-map.md','templates/cross-surface-acceptance.md','templates/evidence-ledger.md','templates/eval-spec.md','tests/behavior/cases.json','tests/behavior/rubric.json','tests/behavior/score.py','tests/behavior/test_score.py','tests/behavior/README.md']
 errors=[]
 for f in required:
     if not (root/f).exists(): errors.append(f'missing: {f}')
@@ -17,24 +16,6 @@ try:
     data=json.loads((root/'knowledge/glossary.json').read_text(encoding='utf-8'))
     if len(data)!=100: errors.append(f'glossary count != 100: {len(data)}')
 except Exception as e: errors.append(f'glossary json invalid: {e}')
-try:
-    registry=json.loads((root/'references/knowledge-sources.json').read_text(encoding='utf-8'))
-    entries=registry.get('sources')
-    if registry.get('version') != 1 or not isinstance(entries, list) or not entries:
-        errors.append('knowledge source registry schema invalid')
-    else:
-        ids=[]; urls=[]
-        for entry in entries:
-            if not isinstance(entry, dict):
-                errors.append('knowledge source entry is not an object'); continue
-            ids.append(entry.get('id')); urls.append(entry.get('url'))
-            url=urlsplit(entry.get('url') or '')
-            if url.scheme != 'https' or not url.hostname or url.username or url.password or url.fragment:
-                errors.append(f'invalid knowledge source URL: {entry.get("id")}')
-            if not isinstance(entry.get('enabled'), bool): errors.append(f'invalid enabled flag: {entry.get("id")}')
-        if len(ids) != len(set(ids)) or len(urls) != len(set(urls)):
-            errors.append('duplicate knowledge source id or URL')
-except Exception as e: errors.append(f'knowledge source registry invalid: {e}')
 if errors:
     print('\n'.join(errors)); sys.exit(1)
 manifest=(root/'manifest.yaml').read_text(encoding='utf-8')

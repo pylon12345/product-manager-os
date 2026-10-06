@@ -25,6 +25,6 @@
 | Viability | | | |
 
 ## Decision
-- Continue / Discover / MVP / Pause:
+- 继续 Discovery / 进入 MVP / 暂停:
 - Why:
 - Revisit / Kill condition:

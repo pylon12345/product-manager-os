@@ -1,5 +1,5 @@
 name: product-manager
-version: 1.1.1
+version: 1.1.2
 display_name: AI Product Manager OS
 language: zh-CN
 focus:
@@ -32,9 +32,6 @@ core_mechanisms:
   - living_sources
   - continuous_operating_loop
   - behavioral_regression
-  - allowlisted_source_sync
-  - local_knowledge_search
-  - verified_backup_restore
 modes:
   - teach
   - assess
@@ -60,4 +57,3 @@ modes:
   - retro
   - interview
   - glossary
-  - knowledge-ops

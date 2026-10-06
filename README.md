@@ -2,12 +2,12 @@
 
 **面向 AI、Agent、SaaS 与 0→1 项目的中文产品经理 Skill：把用户问题、证据、决策、交付与复查连接起来。**
 
-[![Version](https://img.shields.io/badge/version-1.1.1-blue)](product-manager/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.1.2-blue)](product-manager/CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
 
 它让 Agent 按任务选择方法与模板，帮助你判断需求是否值得做、首版应保留什么、AI 功能怎样验收，以及上线后该继续、调整还是停止。重要建议都应说明依据、关键假设、责任人、下一动作和复查条件。
 
-当前版本：**v1.1.1（2026-10-01）**。源码、模板、工作流、脚本和测试材料完整公开；运行时数据库、网页快照、备份、客户资料和项目私有记录不随源码发布。
+当前版本：**v1.1.2（2026-10-06）**。源码、模板、工作流和测试材料完整公开；客户资料和项目私有记录不随源码发布。
 
 ## 从这里开始
 
@@ -15,7 +15,7 @@
 |---|---|
 | 了解定位、方法、架构与能力边界 | [专业介绍与产品运营指南](PRODUCT_MANAGER_OS_GUIDE.md) |
 | 安装并完成第一次调用 | [Codex／Claude／WorkBuddy 安装与升级](product-manager/INSTALL.md) |
-| 查常用指令、25 个模式与详细步骤 | [详细使用说明](product-manager/USER_GUIDE.md) |
+| 查常用指令、24 个模式与详细步骤 | [详细使用说明](product-manager/USER_GUIDE.md) |
 | 按一个案例练习从需求到验收 | [电商 AI 客服演练](product-manager/examples/ecommerce-customer-service.md) |
 | 查看运行规则或本次修复 | [SKILL.md](product-manager/SKILL.md) · [CHANGELOG](product-manager/CHANGELOG.md) |
 
@@ -42,7 +42,7 @@ cd product-manager-os
 python product-manager/validate.py
 ```
 
-按[安装说明](product-manager/INSTALL.md)安装完整的 `product-manager/` 目录。Python 3.10+ 用于校验、离线测试和可选知识库工具；纯指令调用不要求 Python 或本仓库的 API Key。
+按[安装说明](product-manager/INSTALL.md)安装完整的 `product-manager/` 目录。Python 3.10+ 仅用于包校验和评分器测试；纯指令调用不要求 Python 或本仓库的 API Key。
 
 首次调用示例（Codex）：
 
@@ -69,6 +69,13 @@ flowchart LR
 
 项目记录可使用 `.pmcontext.md`、`product/evidence.md` 和 `product/decisions.md`。Skill 在获授权的范围内读取或维护记录；安装本身不启动后台任务，不自动联系用户、发布产品或操作生产系统。
 
+## v1.1.2 更新
+
+- 新增正向（从想法到复盘）与反向（从已有产品或竞品到决定）的标准流程，并合并两个重叠的旧正向流程。
+- 移除可选网页知识库工具：同步结果大多是目录页和落地页，且易变事实本就需实时核对。
+- 功能开发先定指标、评审通过再交接；AI 0→1 先收集样本再选架构。
+- 统一证据标签、能力状态与决策状态词表；SKILL.md 增加工作流索引。
+
 ## v1.1.1 更新
 
 - 拒收已知的 HTTP 200 访问拦截、验证和密码登录页面，保留最新有效知识快照。
@@ -83,7 +90,6 @@ flowchart LR
 
 ```bash
 python product-manager/validate.py
-python -m unittest discover -s product-manager/tests -p "test_*.py"
 python -m unittest discover -s product-manager/tests/behavior -p "test_*.py"
 python product-manager/tests/behavior/score.py --check
 ```

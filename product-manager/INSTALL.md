@@ -1,6 +1,6 @@
 # 安装、升级与调用确认
 
-适用版本：v1.1.1｜核对日期：2026-10-02。
+适用版本：v1.1.2｜核对日期：2026-10-02。
 
 安装对象是**完整的 `product-manager/` 目录**。只复制 `SKILL.md` 会丢失引用的模板、模式和工具。
 
@@ -17,7 +17,7 @@
 
 - 支持目录型 Skills，或能按需读取本地指令的 Agent 环境。
 - 完整源码或发行 ZIP；克隆需要 Git。
-- Python 3.10+ 用于包校验、离线测试和可选知识库工具；纯指令工作流不运行这些工具时无须 Python。
+- Python 3.10+ 仅用于包校验和评分器测试；纯指令使用无须 Python。
 - 核心 Skill 不要求 API Key；浏览、仓库读取等能力由宿主的工具与权限决定。
 
 ```bash
@@ -94,7 +94,7 @@ $product-manager 先评估这个需求是否值得做。
 项目和需求：……
 ```
 
-确认实际读取路径与主文件 `v1.1.1` 标题，而非仅回复“已调用”。未显示时先新开任务，仍无变化则重启 Codex，并检查权限、重复安装或宿主禁用配置。
+确认实际读取路径与主文件 `v1.1.2` 标题，而非仅回复“已调用”。未显示时先新开任务，仍无变化则重启 Codex，并检查权限、重复安装或宿主禁用配置。
 
 <a id="claude-code"></a>
 
@@ -168,7 +168,7 @@ Copy-Item -LiteralPath './product-manager' -Destination $pmClaudeProjectSkills -
 
 Claude 账号内的自定义 Skill 通过 ZIP 上传，见 [Claude 官方使用说明](https://support.claude.com/en/articles/12512180-use-skills-in-claude)（核对日期：2026-10-02）。
 
-1. 从 [Releases](https://github.com/pylon12345/product-manager-os/releases/tag/v1.1.1) 下载 `product-manager-v1.1.1.zip`。
+1. 从 [Releases](https://github.com/pylon12345/product-manager-os/releases/tag/v1.1.2) 下载 `product-manager-v1.1.2.zip`。
 2. 在 Claude 中确认已启用代码执行与文件创建能力；团队账号按组织策略启用 Skills。
 3. 打开 **Customize → Skills**，选择 **+ → Create skill → Upload a skill**。
 4. 上传技能 ZIP，在列表中启用 `product-manager`。
@@ -177,19 +177,16 @@ Claude 账号内的自定义 Skill 通过 ZIP 上传，见 [Claude 官方使用�
 不要直接上传 GitHub 的整个源码 ZIP。技能包的顶层目录应为 `product-manager/`，其中直接包含 `SKILL.md` 与配套目录，见 [Claude 官方打包要求](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills)。
 
 ```text
-product-manager-v1.1.1.zip
+product-manager-v1.1.2.zip
 └─ product-manager/
    ├─ SKILL.md
    ├─ references/
    ├─ templates/
    ├─ workflows/
-   ├─ knowledge/
-   └─ scripts/
+   └─ knowledge/
 ```
 
 本地 Claude Code 个人目录与账号上传是不同安装入口；Cowork 使用账号启用的技能，不会直接读取本机个人技能目录，依据见 [Claude Code 官方说明](https://code.claude.com/docs/en/skills#use-skills-in-cowork-and-cloud-sessions)。
-
-在 Claude 托管执行环境中，知识库数据目录也位于该环境，不能把本机路径视为可访问或永久保存。需要长期本地知识库时，使用已获授权的本地运行环境。
 
 <a id="workbuddy"></a>
 
@@ -197,7 +194,7 @@ product-manager-v1.1.1.zip
 
 WorkBuddy 的官方入口是 **技能 → 添加技能 → 上传技能**，导入后在 **已安装** 中管理启用状态，见 [WorkBuddy 官方技能说明](https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills-Market)（核对日期：2026-10-02）。
 
-1. 下载 [本仓库技能 ZIP](https://github.com/pylon12345/product-manager-os/releases/download/v1.1.1/product-manager-v1.1.1.zip)，保留完整包。
+1. 下载 [本仓库技能 ZIP](https://github.com/pylon12345/product-manager-os/releases/download/v1.1.2/product-manager-v1.1.2.zip)，保留完整包。
 2. 在 WorkBuddy 打开技能页面，选择 **添加技能 → 上传技能**。
 3. 拖入 ZIP 或点击 **选择文件** 导入；若客户端提示格式错误，先核对其当前文件类型要求和上面的包结构。
 4. 在 **已安装** 中搜索 `product-manager`（显示名称也可能为 AI Product Manager OS），确认已启用。
@@ -228,7 +225,7 @@ WorkBuddy 的官方入口是 **技能 → 添加技能 → 上传技能**，导�
 4. 替换经过核验的完整目录；备份放在发现目录之外，避免重复加载。
 5. 新任务确认路径与版本，执行一个熟悉的任务；需要回退时恢复完整旧目录。
 
-v1.1.1 不迁移、清空或重抓包外知识库，不更新已有调度。移动安装目录后，维护者需核对调度中写死的脚本路径。安装备份与知识库备份是两件事。
+v1.1.2 移除了可选网页知识库工具；已有知识库数据与周期同步任务的处理见 [UPGRADE_NOTES](UPGRADE_NOTES.md)。
 
 升级前先核对目标、备份和定制，再替换；不要静默覆盖已有安装。
 
@@ -238,7 +235,6 @@ v1.1.1 不迁移、清空或重抓包外知识库，不更新已有调度。移�
 
 ```bash
 python product-manager/validate.py
-python -m unittest discover -s product-manager/tests -p "test_*.py"
 python -m unittest discover -s product-manager/tests/behavior -p "test_*.py"
 python product-manager/tests/behavior/score.py --check
 ```
@@ -257,9 +253,8 @@ python product-manager/tests/behavior/score.py --check
 | 引用找不到 | 是否只复制入口，或丢失目录结构 |
 | Python 找不到 | 安装 Python 3.10+；系统命令为 python3 时替换命令名 |
 | 浏览或仓库访问被阻止 | 核对宿主权限，记录缺失证据，不编造结论 |
-| 同步部分失败 | 查看 status；保留有效快照，不绕过访问限制 |
-| 希望停止周期任务 | 停用外部调度；卸载 Skill 不等于取消调度 |
+| 旧版知识库周期任务报错 | 在宿主自动化中停用；v1.1.2 起不含同步脚本，卸载 Skill 不会自动取消调度 |
 
 ## 12. 官方来源与适用日期
 
-新增 Claude、Claude Code 和 WorkBuddy 说明核对日期为 2026-10-02；Codex 说明沿用 2026-10-01 的已核对资料。入口随产品版本变化时，请以本节链接的官方资料与当前客户端为准。本次只更新安装文档，Skill 运行版本仍为 v1.1.1。
+新增 Claude、Claude Code 和 WorkBuddy 说明核对日期为 2026-10-02；Codex 说明沿用 2026-10-01 的已核对资料。入口随产品版本变化时，请以本节链接的官方资料与当前客户端为准。Skill 运行版本为 v1.1.2。

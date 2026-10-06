@@ -1,5 +1,11 @@
 # 版本升级说明
 
+## v1.1.1 → v1.1.2：标准流程、移除网页知识库与一致性修复
+
+- 替换整个 Skill 目录即可（不要只覆盖文件，否则已删除的 `scripts/`、`knowledge-base-ops.md`、`idea-to-mvp.md`、`feature-development.md` 会残留）。已有 `.pmcontext.md`、证据与决策记录无需迁移：旧记录里的 `已实现未部署` 按 `已实现` 加“未部署”理解；`REJECTED`、`STOPPED`、`SUPERSEDED` 只用于今后追加的状态事件。
+- 网页知识库工具已移除。若在宿主（如 Codex 自动化）中配置过每周同步，请手动停用：它调用的是旧安装目录里的脚本，升级本 Skill 不会自动取消。包外已有的 `knowledge.sqlite3` 与备份可保留查阅或自行删除，其中内容都能从原网页重新获取。
+- 以前说“按 idea-to-mvp / feature-development 流程”的指令，改为“按 standard-flow 正向”。
+
 ## v1.1.0 → v1.1.1：内容校验与路由修复
 
 - 替换 Skill 包即可使用新的拦截页校验和按任务选择 AI 架构的规则；已知门禁页面不再成为最新快照。

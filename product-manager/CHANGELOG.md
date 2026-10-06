@@ -1,6 +1,16 @@
 # Changelog
 
-## 未发布文档更新（2026-10-02）
+## 1.1.2 — 标准流程、移除网页知识库与逻辑一致性修复（2026-10-06）
+
+- 新增 `workflows/standard-flow.md`：正向（F1 问题 → F11 复盘，每步写明模式、产物和过关条件）与反向（R1 锁定 → R6 收束，分自有项目和竞品两种对象），并规定反向结论从正向哪一步接入。原 `idea-to-mvp` 与 `feature-development` 两个重叠的正向流程并入其中。
+- 移除可选网页知识库（`scripts/pm_kb.py`、`references/knowledge-base-ops.md`、`references/knowledge-sources.json`、`knowledge-ops` 模式及其测试）。实测 8 个白名单来源中只有 1 个抓到实质正文，其余多为目录页或落地页；且易变事实本就需要实时核对一手页面。`living-sources.md` 保留为来源入口清单，需要时直接打开核对。
+- 正向主线改为先定成功指标、评审通过后再交接；AI 0→1 先收集真实任务样本再选架构，不默认加入 RAG。
+- 生命周期写明进入/退出条件的含义，区分 VALIDATION（设计验证）与 MVP（执行验证）。
+- 统一词表：模式内细分证据标签与基础标签的对应关系写入 Foundations；能力状态以 project-reality 为唯一词表（`已实现未部署` 改为 `已实现` + 单独记录部署）；决策记录增加 `REJECTED`、`STOPPED`、`SUPERSEDED` 终止状态。
+- SKILL.md 增加工作流索引；Slop Test 中能当场修正的问题先修正再交付。PRD 模板修正重复章节编号并补 Offline 状态；assess 接入 problem-brief 模板。
+- 冻结的八个行为案例与评分标准不变，本次不宣称模型盲测通过。
+
+### 随附文档更新（2026-10-02）
 
 - 增加 Claude Code 个人／项目目录安装、Claude 网页／桌面端 ZIP 上传和 WorkBuddy 本地技能包导入说明；补充调用差异、包结构、验证与排错。
 - 同步主仓库与说明仓库的安装导航和手册；运行版本仍为 v1.1.1，本项不构成跨宿主任务验收。

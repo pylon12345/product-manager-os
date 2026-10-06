@@ -21,4 +21,4 @@
 
 框架名称沿用其公开行业名称，如 Mom Test、JTBD、RICE、Shape Up、Opportunity Solution Tree、Now/Next/Later。使用这些名称不代表复制具体实现文本。
 
-可随时间更新的外部资料入口与使用边界见 `references/living-sources.md`。正式版的可选本地同步只处理 `references/knowledge-sources.json` 中明确启用的精确 URL；网页快照存放在独立数据目录，不随 Skill 包分发，也不自动成为权威结论。周期运行需使用者另行配置自动化，详见 `references/knowledge-base-ops.md`。
+可随时间更新的外部资料入口与使用边界见 `references/living-sources.md`。这些是需要时直接打开核对的入口，不随 Skill 包缓存网页内容。

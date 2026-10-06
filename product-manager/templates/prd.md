@@ -40,12 +40,12 @@
 - 成功、部分成功和失败时的反馈与恢复：
 - 可用性验证任务与验收信号：
 
-## 6. User Flow
+## 7. User Flow
 ```text
 Entry → Action → Core Value → Completion / Feedback
 ```
 
-## 7. Functional Requirements
+## 8. Functional Requirements
 ### FR-001
 - User Story:
 - Preconditions:
@@ -55,7 +55,7 @@ Entry → Action → Core Value → Completion / Feedback
 - Permission:
 - Acceptance Criteria:
 
-## 8. Experience States
+## 9. Experience States
 - Empty:
 - Loading:
 - Error:
@@ -63,22 +63,23 @@ Entry → Action → Core Value → Completion / Feedback
 - Retry:
 - Duplicate:
 - Permission denied:
+- Offline（适用时）:
 
-## 9. Data / Analytics
+## 10. Data / Analytics
 | Event | Trigger | Properties | Metric |
 |---|---|---|---|
 
-## 10. Non-functional Requirements
+## 11. Non-functional Requirements
 - Performance:
 - Reliability:
 - Security:
 - Privacy:
 - Accessibility:
 
-## 11. Dependencies / Risks / Trade-offs
+## 12. Dependencies / Risks / Trade-offs
 -
 
-## 12. Rollout / Rollback
+## 13. Rollout / Rollback
 - Feature flag:
 - Gray rollout:
 - Monitoring:
