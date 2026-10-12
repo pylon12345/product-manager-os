@@ -6,14 +6,16 @@
 ## 2. 建项目上下文
 > 调用 product-manager，执行 teach。我把项目介绍给你，输出一份 `.pmcontext.md`。
 
-## 3. 从 Idea 到 MVP
-> 调用 product-manager，按 idea-to-mvp workflow 推进。所有假设都标出来，优先找最便宜的验证方式。
+## 3. 标准流程
+> 调用 product-manager，按 standard-flow 正向从 F1 推进到 MVP。所有假设都标出来，优先找最便宜的验证方式。
+>
+> 调用 product-manager，按 standard-flow 反向拆解这个竞品，最后给“做 / 暂缓 / 不做”和止损条件，并说明从正向哪一步接入。
 
 ## 4. 写 PRD
 > 调用 product-manager，基于 `.pmcontext.md` 和已验证需求写 PRD。必须包含 Non-goals、Edge Cases、埋点、验收和回滚。
 
 ## 5. AI 架构
-> 调用 product-manager，判断这个任务应该用固定 Workflow、RAG、Tool Calling、MCP 还是 Agent。请给被拒绝方案和升级条件。
+> 调用 product-manager，判断这个任务应该用固定 Workflow、RAG、Tool Calling、MCP 还是 Agent。请给被拒绝方案，以及引入或移除各项能力的触发条件。
 
 ## 6. AI PRD + Eval
 > 调用 product-manager，生成 AI PRD 和 Eval Spec。重点写 Golden Set、失败模式、HITL、P95 延迟、Cost per Successful Task、灰度门槛。

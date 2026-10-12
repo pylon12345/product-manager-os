@@ -16,7 +16,7 @@ core_mechanisms:
   - critical_review
   - decision_log
   - lifecycle_router
-  - ai_architecture_selection
+  - task_based_ai_architecture
   - ai_evaluation
   - pm_slop_test
   - decision_contract

@@ -4,7 +4,7 @@ import re, sys, json
 root=Path(__file__).parent
 required=['SKILL.md','README.md','manifest.yaml','agents/openai.yaml','knowledge/glossary.md','knowledge/glossary.json','references/decision-contract.md','references/project-reality.md','references/mode-reverse-decompose.md','references/mode-improve-os.md','references/mode-delivery-os.md','references/living-sources.md','references/knowledge-base-ops.md','references/knowledge-sources.json','references/operating-loop.md','scripts/pm_kb.py','tests/test_pm_kb.py','workflows/continuous-product-loop.md','workflows/skill-improvement-loop.md','templates/project-reverse-map.md','templates/skill-badcase.md','templates/skill-change-proposal.md','templates/system-reality-map.md','templates/role-task-permission-map.md','templates/cross-surface-acceptance.md','templates/evidence-ledger.md','templates/eval-spec.md','tests/behavior/cases.json','tests/behavior/rubric.json','tests/behavior/score.py','tests/behavior/test_score.py','tests/behavior/README.md']
 errors=[]
-required.append('tests/test_pm_kb_changes.py')
+required.extend(['tests/test_pm_kb_changes.py', 'workflows/standard-flow.md'])
 for f in required:
     if not (root/f).exists(): errors.append(f'missing: {f}')
 skill=(root/'SKILL.md').read_text(encoding='utf-8')
@@ -13,6 +13,8 @@ if '`reverse-decompose`' not in skill or '`references/mode-reverse-decompose.md`
     errors.append('reverse-decompose is not routed from SKILL.md')
 if '`improve-os`' not in skill or '`references/mode-improve-os.md`' not in skill:
     errors.append('improve-os is not routed from SKILL.md')
+if '`knowledge-ops`' not in skill or '`references/knowledge-base-ops.md`' not in skill:
+    errors.append('knowledge-ops is not routed from SKILL.md')
 refs=re.findall(r'`((?:references|templates|knowledge|workflows)/[^`]+)`', skill)
 for r in refs:
     if not (root/r).exists(): errors.append(f'broken reference: {r}')
@@ -55,6 +57,7 @@ else:
         errors.append('CHANGELOG.md missing current version')
 if not re.search(r'(?m)^\s*- reverse-decompose\s*$', manifest): errors.append('manifest missing reverse-decompose mode')
 if not re.search(r'(?m)^\s*- improve-os\s*$', manifest): errors.append('manifest missing improve-os mode')
+if not re.search(r'(?m)^\s*- knowledge-ops\s*$', manifest): errors.append('manifest missing knowledge-ops mode')
 expected_refs={'mode-competitive-intelligence.md','mode-research-ops.md','mode-pricing.md','mode-ai-economics.md','mode-experience.md','mode-reverse-decompose.md'}
 missing_refs=expected_refs-{p.name for p in (root/'references').glob('*.md')}
 if missing_refs: errors.append('missing core references: '+', '.join(sorted(missing_refs)))

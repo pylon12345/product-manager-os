@@ -1,268 +1,74 @@
 # AI Product Manager OS v1.2.1
 
-一个面向 **AI 产品经理、AI Agent、SaaS 和 0→1 开发** 的中文产品经理 Skill。
+中文产品经理 Skill，面向 AI、Agent、SaaS、0→1 项目与已有产品改版。通过按需路由，将用户问题、证据判断、方案取舍、交付规格、AI 质量与成本、上线复盘组织成可重复的工作方式。
 
-v1.2.1 是待审核候选版，整合 v1.1.1 的内容有效性和路由修复，以及 v1.2 的 Skill 自身改进闭环；新增快照差异查看、在用判断关联与成本费率依据。它可在 Codex、Claude Code、Cursor、Windsurf 或其他 Agent 工作流中复用。已有项目和包外知识库无需迁移；候选版审核通过并安装后，新工具才会进入实际工作流。
+**先确认本轮要支持什么决定，再选择方法与产物。** 重要结果应带依据、假设、责任人、下一动作与复查条件，不以模板数量代替产品进展。
 
-## 正式版核心能力
+## 文档导航
 
-- **Router**：先识别任务，再按需加载知识。
-- `.pmcontext.md`：同一项目只需建立一次产品上下文。
-- **Evidence Gate**：弱证据不能直接升级成高成本开发。
-- **Critical Review / PM Slop Test**：AI 不再只会顺着需求写文档。
-- **Decision Log**：记录为什么做、接受了什么代价、什么时候重新评估。
-- 完整生命周期：`IDEA → DISCOVERY → VALIDATION → MVP → BUILD → TEST → LAUNCH → MEASURE → ITERATE`。
-- AI 架构选择最简单且足够的基线，按任务缺口选择或组合 RAG、Tools、Agent 与 Fine-tuning。
-- AI PRD 单独建模：Eval、Golden Set、Guardrails、Failure Modes、HITL、成本、延迟、上线门槛。
-- 100 个术语移到按需加载知识层，不再浪费每次调用的上下文。
-- Decision Contract 把每个复杂任务绑定到决定、Owner、证据门槛与 Revisit/Kill 条件。
-- 竞品情报、研究运营、定价商业化、AI 单位经济与产品体验专业模式。
-- 价格调整与 AI 质量-成本闭环工作流，以及对应决策模板。
-- Codex 原生 `agents/openai.yaml`，支持自动发现和清晰的默认调用。
-- 已有产品的现实快照与跨端交付判断，避免把“完整”误解为补齐所有页面。
-- 从已有仓库反推用户任务、能力、模块依赖与下一步；关键结论附来源，不把代码存在等同已上线或被用户需要。
-- 将项目证据、决策承诺、执行结果与复查连接成轻量持续工作闭环，并加入可复现的行为回归材料。
-- 受控公开来源增量同步、本地检索、可校验备份和安全恢复；知识库数据与 Skill 包分离。
-- Skill 自身的坏例归因、候选变更和同夹具新旧版人工评分比较；发布须维护者确认，私有资料不自动入仓。
+- [安装与升级](INSTALL.md)：Codex、Claude Code、Claude 网页／桌面端与 WorkBuddy 的安装、调用确认、升级和排错。
+- [详细使用说明](USER_GUIDE.md)：输入准备、26 个模式、常用指令与连续项目。
+- [电商 AI 客服演练](examples/ecommerce-customer-service.md)：从问题验证到 PRD、Eval 与上线决定。
+- [主入口](SKILL.md)：Agent 执行规则、路由和按需资源。
+- [版本记录](CHANGELOG.md) · [升级说明](UPGRADE_NOTES.md) · [方法来源](SOURCES.md)。
 
-## 目录
+## 核心能力
 
-```text
-product-manager/
-├─ SKILL.md
-├─ agents/openai.yaml
-├─ README.md
-├─ INSTALL.md
-├─ LICENSE
-├─ manifest.yaml
-├─ CHANGELOG.md
-├─ UPGRADE_NOTES.md
-├─ SOURCES.md
-├─ validate.py
-├─ knowledge/
-│  ├─ glossary.md
-│  ├─ glossary.json
-│  ├─ frameworks.md
-│  └─ ai-product-craft.md
-├─ references/
-│  ├─ foundations.md
-│  ├─ decision-contract.md
-│  ├─ operating-loop.md
-│  ├─ project-reality.md
-│  ├─ living-sources.md
-│  ├─ knowledge-sources.json
-│  ├─ knowledge-base-ops.md
-│  ├─ mode-teach.md
-│  ├─ mode-assess.md
-│  ├─ mode-discover.md
-│  ├─ mode-research-ops.md
-│  ├─ mode-competitive-intelligence.md
-│  ├─ mode-prioritize.md
-│  ├─ mode-mvp.md
-│  ├─ mode-reverse-decompose.md
-│  ├─ mode-improve-os.md
-│  ├─ mode-delivery-os.md
-│  ├─ mode-experience.md
-│  ├─ mode-prd.md
-│  ├─ mode-review.md
-│  ├─ mode-metrics.md
-│  ├─ mode-pricing.md
-│  ├─ mode-roadmap.md
-│  ├─ mode-handoff.md
-│  ├─ mode-ai-architecture.md
-│  ├─ mode-ai-prd.md
-│  ├─ mode-eval.md
-│  ├─ mode-ai-economics.md
-│  ├─ mode-launch.md
-│  ├─ mode-retro.md
-│  └─ mode-interview.md
-├─ templates/
-│  ├─ pmcontext.md
-│  ├─ evidence-ledger.md
-│  ├─ problem-brief.md
-│  ├─ discovery-plan.md
-│  ├─ mvp.md
-│  ├─ prd.md
-│  ├─ ai-prd.md
-│  ├─ metrics.md
-│  ├─ roadmap.md
-│  ├─ tech-handoff.md
-│  ├─ eval-spec.md
-│  ├─ launch-checklist.md
-│  ├─ decision-log.md
-│  ├─ retro.md
-│  ├─ competitive-intelligence.md
-│  ├─ research-plan.md
-│  ├─ pricing-decision.md
-│  ├─ ai-unit-economics.md
-│  ├─ experience-brief.md
-│  ├─ project-reverse-map.md
-│  ├─ system-reality-map.md
-│  ├─ role-task-permission-map.md
-│  ├─ cross-surface-acceptance.md
-│  ├─ skill-badcase.md
-│  └─ skill-change-proposal.md
-├─ workflows/
-│  ├─ lifecycle.md
-│  ├─ continuous-product-loop.md
-│  ├─ skill-improvement-loop.md
-│  ├─ idea-to-mvp.md
-│  ├─ feature-development.md
-│  ├─ ai-product-0-to-1.md
-│  ├─ agent-development.md
-│  ├─ product-review.md
-│  ├─ pricing-change.md
-│  └─ ai-quality-cost-loop.md
-├─ scripts/
-│  └─ pm_kb.py
-├─ tests/
-│  ├─ test_pm_kb.py
-│  ├─ test_pm_kb_changes.py
-│  └─ behavior/
-│     ├─ cases.json
-│     ├─ rubric.json
-│     ├─ score.py
-│     ├─ test_score.py
-│     └─ README.md
-└─ examples/
-   ├─ call-examples.md
-   ├─ scenario-audit-v2.2.md
-   └─ workbench-delivery-trial.md
-```
+| 范围 | 能力 |
+|---|---|
+| 需求与研究 | 项目上下文、想法评估、用户发现、研究运营、竞品情报 |
+| 决策与交付 | 优先级、MVP、PRD、评审、指标、定价、Roadmap、交接 |
+| 已有产品 | 仓库反推、现实快照、跨角色交付、体验与验收 |
+| AI 产品 | 任务驱动架构、AI PRD、Eval、失败兜底、延迟与单位经济 |
+| 持续改进 | 上线门槛、监测、复盘、证据与历史决策复查 |
+| Skill 维护 | 坏例归因、候选改动、同夹具人工评分比较与维护者审批 |
+| 可选知识库 | 白名单同步、本地检索、快照差异、备份校验与恢复 |
 
-## 正式版运行资产
+包内包含 26 个模式、25 个模板、9 个工作流与 100 个术语。只加载当前任务需要的文件，不把整个知识目录注入每轮上下文。
 
-- 30 个按需 references，覆盖从项目反推、发现、研究、竞争、定价到 AI 质量、成本、跨端交付、持续运营、Skill 自身改进和知识库运维。
-- 25 个可直接填充的产品与维护模板。
-- 10 个端到端 workflows。
-- Codex 原生 `agents/openai.yaml`，默认允许自动发现，也可用 `$product-manager` 显式调用。
-- `validate.py` 提供无网络、只读的包完整性检查；行为回归材料用于检查实际任务表现，不能以结构校验代替。
-- `scripts/pm_kb.py` 使用 Python 标准库，在明确指定的数据目录中保存公开网页快照并管理本地备份；安装后不会自行运行。
+## 第一次调用
 
-## 行为质量怎样验收
-
-`tests/behavior/` 包含 9 个冻结任务和人工评分规则，覆盖项目反推、多版本交付、定价、AI Eval、单位经济、过期来源、越权、上线后复查与 Skill 自身改进。先在全新任务中只提供 Skill 和单个案例输入，保存未经修改的回答；再由评审按可观察标准打分。运行 `python tests/behavior/score.py --check` 只验证案例与规则文件，**不会调用或评判模型**。`--compare` 读取同夹具、同模型的两份完整人工评分并列出回归，不能替代人工发布审批。完整操作见 `tests/behavior/README.md`。
-
-## Skill 怎样持续改进
-
-当实际任务暴露错误判断、越权、模式选择或知识时效问题时，用 `improve-os` 先判断根因是否真的在 Skill；在用户指定的**包外私有目录**填 `templates/skill-badcase.md`，再用 `templates/skill-change-proposal.md` 提出最小改动。只有经过权限核对的脱敏/合成复现题可进入公开回归集。旧版和候选版在同一冻结夹具上分别跑出原始回答，由人评分并核对模型构建、采样、工具和外部来源条件，再用 `score.py --compare` 检查差异。脚本只核对模型标识，不能代替条件核对。维护者审查证据、隐私、风险和版本后才批准发布；评分脚本的 PASS 不是发布许可。完整门禁见 `workflows/skill-improvement-loop.md`。
+下例使用 Codex 语法；Claude Code 改为 `/product-manager`，Claude／WorkBuddy 使用自然语言指定已安装技能。
 
 ```text
-调用 product-manager，用 improve-os 复盘这次错误建议。先判断是不是 Skill 的问题，给我一个不含客户隐私的坏例摘要、最小候选修改和新旧版复测计划；未经我确认不要修改或发布 Skill。
+$product-manager
+项目：……
+目标用户与当前问题：……
+已有证据：……；未知的信息：……
+本轮要支持的决定：……
+约束与授权范围：……
+请先给结论，区分事实与假设，再给最小验证、下一动作和复查条件。
 ```
 
-## 持续工作怎样运行
+输入不全时可要求带假设的草稿；高成本、不可逆或高风险决定仍需补齐证据。
 
-对同一项目的连续任务，先读取已有 `.pmcontext.md`、相关证据和决策记录，核对适用版本与时间，再只推进本轮最重要的一个决定。建议与已确认决策分开；实施结果要对照原预测复查。最小闭环是：**证据 → 决定 → Owner 与下一动作 → 可观察结果 → 复查触发条件**。详见 `workflows/continuous-product-loop.md`。
+## 运行机制与边界
 
-这个项目决策闭环不会自行修改项目或自动发布。网页知识库同步是独立的可选工具；只有明确调用或另行配置周期自动化时才运行，也不会自动写入项目证据与决策日志。没有写入授权时，Skill 只在答复中给出待确认的记录建议。
+- 一般中文产品任务由本 Skill 处理；`product-manager-skills` 可用于 PLG、定位、财务与职业辅导的专项深挖，**不是安装依赖**。
+- 产品体验模式负责任务、流程、信息优先级和验收；实际 UI 产物接入设计或开发工作流。
+- 项目上下文、证据与决策记录用于跨次衔接；没有写回授权时只给记录建议。
+- 易变的外部事实直接核对一手来源并注明观察日期，不当作项目内部证据。
+- 安装不启动服务或调度，也不自动执行发布、调价或生产修改。
 
-```text
-调用 product-manager，延续这个项目。先核对已有上下文、证据和历史决策；告诉我本轮应做的一个决定、依据、下一动作和复查条件。先不要修改项目文件。
-```
-## 产品设计与 UI 的分工
+## 质量检查
 
-`experience` 负责用户任务闭环、信息结构、关键状态、反馈与恢复、可用性验证及产品验收。需要视觉风格、高保真页面、原型或前端实现时，继续使用相应的产品设计或开发工作流。已有界面的视觉问题必须基于截图或实际界面证据审查。
+从本目录运行：
 
-静态场景审计见 `examples/scenario-audit-v2.2.md`；匿名化交付判断示例见 `examples/workbench-delivery-trial.md`。两者用于检查规则与路由，不等于真实身份或真机业务验收。
-
-## 已有产品怎样使用
-
-接手一个已有代码/产品仓库、想弄清“现有项目究竟实现了什么、可能服务什么任务、下一步从何拆起”时，先用 `reverse-decompose`。它从可追溯证据重建 **as-is** 能力与依赖，把推断的用户和价值留作假设；按需填写 `templates/project-reverse-map.md`。没有真实运行或用户证据时，不宣称已上线、有效果或已验证需求。
-
-```text
-调用 product-manager，用 reverse-decompose 分析这个代码仓库。请先说明检查范围和提交版本，沿入口→用户任务→能力→模块/数据依赖反推现状；每个关键结论标明来源，区分观察、推断与待验证，并给出最值得先核验的一条任务链。先不要改项目文件或写完整 PRD。
+```bash
+python validate.py
+python -m unittest discover -s tests -p "test_*.py"
+python -m unittest discover -s tests/behavior -p "test_*.py"
+python tests/behavior/score.py --check
 ```
 
-遇到“把旧工作台做完整”“多端系统能否上线”时，先用 `delivery-os`。它先核实当前入口、版本、数据源及证据等级，再定义目标角色的任务闭环，最后给出 Now/Next/Later 和跨端验收门槛。按需使用三份模板，不要求每个任务都填满三张表。
+这些检查验证包结构、工具行为和测试材料。实际模型表现需按 [Behavior regression kit](tests/behavior/README.md)独立评估，不把工具测试当作业务验收。
 
-示例：
+## v1.2.1
 
-```text
-调用 product-manager，按 delivery-os 审查现有教师工作台。区分旧系统、当前系统与演示版；给我可运营范围、跨角色任务闭环和 Go/No-go 验收，不要修改生产数据。
-```
+整合主分支正向／反向标准流程、阶段定义和统一词表；保留可选知识库，新增快照差异查看与成本费率追溯，并加入受控的 Skill 自身迭代。升级不迁移、重抓或清空包外知识库，也不变更已有周期任务。许可见 [LICENSE](LICENSE)。
 
-## 可更新知识来源
+## 可选知识库与自身迭代
 
-`references/living-sources.md` 收录经核对的官方或一手入口，按用户研究、商业模式、定价、AI Eval、模型成本、风险和行业趋势分类。`references/knowledge-sources.json` 是机器白名单：同步器只尝试其中启用的完整 HTTPS URL，不跟随页面链接；抓取仍受 robots.txt 和站点规则约束。项目访谈、实际使用数据及业务约束始终优先于通用文章。本地快照用于离线查找和追溯，定价、政策、模型能力等易变事实仍要打开当前一手页面核验。
+知识库仅在用户要求时使用，Python 标准库即可运行；指定包外绝对数据目录，按[Knowledge Base Ops](references/knowledge-base-ops.md)执行 `sync`、`status`、`search`、`changes`、`backup`、`verify-backup` 或显式恢复。只抓取白名单精确 URL，不跟随页面链接，不绕过站点限制；抓取成功不代表文章正文可用，缓存不代替实时一手核验。快照、备份、私有研究和项目记录不公开。
 
-## 本地知识库：同步、检索和备份
-
-v1.2.1 的 `changes` 可只读查看同一来源的新旧快照，输出快照 ID、URL、时间、哈希、带上下文的差异及截断标识。行顺序变化也可能改变价格对应关系，因此工具仅报告差异，不替用户判断业务影响。通知前需在当前项目已有证据或决策中找到相关主张；无关联时按用户通知偏好处理。HTTP 200 的已知访问拦截/登录页会被拒收，保留上一份有效内容。
-
-从 Skill 根目录运行以下命令，把示例绝对路径换成你自己的**包外数据目录**。工具不会把数据库写进 Skill 安装包，也不需要第三方依赖。
-
-```powershell
-python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" --sources-file references/knowledge-sources.json sync
-python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" --sources-file references/knowledge-sources.json search "evaluation" --limit 10
-python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" --sources-file references/knowledge-sources.json status
-python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" changes --source openai-api-pricing --max-lines 120
-python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" --sources-file references/knowledge-sources.json backup
-```
-
-备份命令会返回文件路径；再用 `verify-backup <备份绝对路径>` 校验。恢复需要显式 `restore <备份绝对路径>`，已有活动库时还要 `--force`：工具先原样隔离旧库供排查；若旧库完整，另生成可验证的 `pre-restore` 安全备份。原样隔离副本未经验证，不等于可恢复备份。完整的故障处理、来源增减、时效标注、恢复演练和每周自动化顺序见 `references/knowledge-base-ops.md`。Skill 不常驻；每周运行必须另行配置调度。
-
-## 最常用的调用方式
-
-```text
-调用 product-manager，先评估这个想法，不要急着写 PRD：……
-```
-
-```text
-调用 product-manager，执行 teach，帮这个项目建立 .pmcontext.md。
-```
-
-```text
-调用 product-manager，把这个需求推进到 MVP，但先检查证据和关键假设。
-```
-
-```text
-调用 product-manager，评审这个 PRD。重点找：用户问题、指标、Non-goals、边界、失败路径和不可验收项。
-```
-
-```text
-调用 product-manager，判断这个 AI 功能应该用 Workflow、RAG、Tool Calling 还是 Agent，不要默认上 Agent。
-```
-
-```text
-调用 product-manager，为这个 AI 功能生成 AI PRD + Eval Spec + 上线门槛。
-```
-
-```text
-调用 product-manager，用 competitive-intelligence 判断我们该差异化、监控还是忽略，不要只做功能矩阵。
-```
-
-```text
-调用 product-manager，用 pricing 模式设计价值度量、套餐和调价迁移，并建 Downside/Base/Upside 模型。
-```
-
-```text
-调用 product-manager，用 ai-economics 计算 Cost per Successful Task，给模型路由、预算和熔断建议。
-```
-
-## 推荐安装思路
-
-把整个目录作为一个 Skill 目录安装，入口保持为 `SKILL.md`。不同 Agent 的发现目录不同，因此本包不把运行时路径写死；核心原则是：**入口文件可见，且 `references/`、`templates/`、`knowledge/` 保持相对路径不变。**
-
-## 使用原则
-
-一般中文产品任务由本 Skill 负责；需要 PLG 增长、定位、财务或职业专项知识时，可按需读取可用的 `product-manager-skills` 对应模块，用户显式选择优先。Foundations、Frameworks 与 AI Product Craft 均有按需入口；术语统一维护 glossary，terms 留作兼容。
-
-- 想法阶段先 `assess` / `discover`，不要直接 `prd`。
-- 重大开发前先建立 `.pmcontext.md`。
-- AI 功能必须跑 `ai-architecture` 和 `eval`。
-- 对复杂产品体验先明确任务、信息优先级和恢复路径；需要视觉方案时接续设计工作流。
-- 重大交付前用 `review` 检查问题、范围、体验和风险。
-- 上线后用 `retro` 回看原始预测与真实结果。
-
-## 安装
-
-`INSTALL.md` 给出 Windows PowerShell 与 macOS/Linux 的复制命令；包内没有独立安装脚本。
-
-## 版本与定版说明
-
-详见 `UPGRADE_NOTES.md`。
-
-## 开源许可
-
-本 Skill 以 [Apache License 2.0](LICENSE) 开源。公开仓库仅提供代码、模板和方法资料；运行时抓取的网页全文及本地知识库备份不属于发行包。
+改进 Skill 用 `improve-os` 和[改进工作流](workflows/skill-improvement-loop.md)：区分真实坏例与上下文或工具问题，提出最小修改，在同一冻结夹具上比较新旧原始回答及人工评分，再由维护者批准发布。9 个冻结案例只提供评测材料；本版完整新旧人工行为评测仍待完成。
