@@ -2,12 +2,12 @@
 
 **面向 AI、Agent、SaaS 与 0→1 项目的中文产品经理 Skill：把用户问题、证据、决策、交付与复查连接起来。**
 
-[![Version](https://img.shields.io/badge/version-1.1.2-blue)](product-manager/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.1-blue)](product-manager/CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
 
 它让 Agent 按任务选择方法与模板，帮助你判断需求是否值得做、首版应保留什么、AI 功能怎样验收，以及上线后该继续、调整还是停止。重要建议都应说明依据、关键假设、责任人、下一动作和复查条件。
 
-当前版本：**v1.1.2（2026-10-06）**。源码、模板、工作流和测试材料完整公开；客户资料和项目私有记录不随源码发布。
+当前版本：**v1.2.1（2026-10-12）**。源码、模板、工作流和测试材料完整公开；客户资料和项目私有记录不随源码发布。
 
 ## 从这里开始
 
@@ -15,7 +15,7 @@
 |---|---|
 | 了解定位、方法、架构与能力边界 | [专业介绍与产品运营指南](PRODUCT_MANAGER_OS_GUIDE.md) |
 | 安装并完成第一次调用 | [Codex／Claude／WorkBuddy 安装与升级](product-manager/INSTALL.md) |
-| 查常用指令、24 个模式与详细步骤 | [详细使用说明](product-manager/USER_GUIDE.md) |
+| 查常用指令、26 个模式与详细步骤 | [详细使用说明](product-manager/USER_GUIDE.md) |
 | 按一个案例练习从需求到验收 | [电商 AI 客服演练](product-manager/examples/ecommerce-customer-service.md) |
 | 查看运行规则或本次修复 | [SKILL.md](product-manager/SKILL.md) · [CHANGELOG](product-manager/CHANGELOG.md) |
 
@@ -42,7 +42,7 @@ cd product-manager-os
 python product-manager/validate.py
 ```
 
-按[安装说明](product-manager/INSTALL.md)安装完整的 `product-manager/` 目录。Python 3.10+ 仅用于包校验和评分器测试；纯指令调用不要求 Python 或本仓库的 API Key。
+按[安装说明](product-manager/INSTALL.md)安装完整的 `product-manager/` 目录。Python 3.10+ 用于包校验、离线测试和可选知识库工具；纯指令调用不要求 Python 或本仓库的 API Key。
 
 首次调用示例（Codex）：
 
@@ -69,10 +69,12 @@ flowchart LR
 
 项目记录可使用 `.pmcontext.md`、`product/evidence.md` 和 `product/decisions.md`。Skill 在获授权的范围内读取或维护记录；安装本身不启动后台任务，不自动联系用户、发布产品或操作生产系统。
 
-## v1.1.2 更新
+## v1.2.1 更新
 
 - 新增正向（从想法到复盘）与反向（从已有产品或竞品到决定）的标准流程，并合并两个重叠的旧正向流程。
-- 移除可选网页知识库工具：同步结果大多是目录页和落地页，且易变事实本就需实时核对。
+- 按维护者选择保留可选知识库：白名单同步、离线检索、快照比较、备份校验与恢复；不自动启用，也不改变现有调度。入口页不等于实质正文，易变事实仍需实时核对。
+- 增加 Skill 坏例归因、最小候选修改与同夹具人工评分比较；工具测试不替代实际行为评估。
+- 快照变化先关联已有证据与决定，AI 成本保留型号、档位、计费单位与原始费率依据。操作见[知识库说明](product-manager/references/knowledge-base-ops.md)。
 - 功能开发先定指标、评审通过再交接；AI 0→1 先收集样本再选架构。
 - 统一证据标签、能力状态与决策状态词表；SKILL.md 增加工作流索引。
 
@@ -90,13 +92,16 @@ flowchart LR
 
 ```bash
 python product-manager/validate.py
+python -m unittest discover -s product-manager/tests -p "test_*.py"
 python -m unittest discover -s product-manager/tests/behavior -p "test_*.py"
 python product-manager/tests/behavior/score.py --check
 ```
 
-包校验检查结构，离线测试检查工具与评分器，8 个冻结案例检查材料完整性。**这些命令不调用模型，不证明真实业务效果，也不等于 8 个案例已通过模型盲测。** 实际行为测试须保存原始回答，再按[评估协议](product-manager/tests/behavior/README.md)评分。
+包校验检查结构，离线测试检查工具与评分器，9 个冻结案例检查材料完整性。**这些命令不调用模型，不证明真实业务效果，也不等于 9 个案例已通过模型盲测。** 实际行为测试须保存原始回答，再按[评估协议](product-manager/tests/behavior/README.md)评分。
 
 本 Skill 定义产品任务、流程、信息结构和验收；高保真界面、代码实现与实际部署由设计和开发工作流完成。它辅助产品判断，不能替代真实用户研究、负责人决策或系统验收。
+
+当前 v1.2.1 的完整新旧版人工行为评测仍待完成；合并不代表该评测已经通过。
 
 ## 开源与文档
 

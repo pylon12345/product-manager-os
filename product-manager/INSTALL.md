@@ -1,6 +1,6 @@
 # 安装、升级与调用确认
 
-适用版本：v1.1.2｜核对日期：2026-10-02。
+适用版本：v1.2.1｜核对日期：2026-10-02。
 
 安装对象是**完整的 `product-manager/` 目录**。只复制 `SKILL.md` 会丢失引用的模板、模式和工具。
 
@@ -17,7 +17,7 @@
 
 - 支持目录型 Skills，或能按需读取本地指令的 Agent 环境。
 - 完整源码或发行 ZIP；克隆需要 Git。
-- Python 3.10+ 仅用于包校验和评分器测试；纯指令使用无须 Python。
+- Python 3.10+ 用于包校验、离线测试与可选知识库工具；纯指令使用无须 Python。
 - 核心 Skill 不要求 API Key；浏览、仓库读取等能力由宿主的工具与权限决定。
 
 ```bash
@@ -94,7 +94,7 @@ $product-manager 先评估这个需求是否值得做。
 项目和需求：……
 ```
 
-确认实际读取路径与主文件 `v1.1.2` 标题，而非仅回复“已调用”。未显示时先新开任务，仍无变化则重启 Codex，并检查权限、重复安装或宿主禁用配置。
+确认实际读取路径与主文件 `v1.2.1` 标题，而非仅回复“已调用”。未显示时先新开任务，仍无变化则重启 Codex，并检查权限、重复安装或宿主禁用配置。
 
 <a id="claude-code"></a>
 
@@ -168,16 +168,24 @@ Copy-Item -LiteralPath './product-manager' -Destination $pmClaudeProjectSkills -
 
 Claude 账号内的自定义 Skill 通过 ZIP 上传，见 [Claude 官方使用说明](https://support.claude.com/en/articles/12512180-use-skills-in-claude)（核对日期：2026-10-02）。
 
-1. 从 [Releases](https://github.com/pylon12345/product-manager-os/releases/tag/v1.1.2) 下载 `product-manager-v1.1.2.zip`。
+1. 使用 [Releases](https://github.com/pylon12345/product-manager-os/releases) 中明确标注目标版本的技能包。若 v1.2.1 尚无发行附件，先克隆本仓库主分支，再按下方命令从源码打包，不使用旧版附件代替。
 2. 在 Claude 中确认已启用代码执行与文件创建能力；团队账号按组织策略启用 Skills。
 3. 打开 **Customize → Skills**，选择 **+ → Create skill → Upload a skill**。
 4. 上传技能 ZIP，在列表中启用 `product-manager`。
 5. 新开对话，请求“使用 product-manager 技能评估这个产品想法”，检查是否加载相关指令。
 
+从已校验的源码仓库根目录打包（输出文件存在时先另选路径，不覆盖旧包）：
+
+```powershell
+Compress-Archive -LiteralPath ./product-manager -DestinationPath ./product-manager-v1.2.1.zip
+```
+
+打包前确认目录内不含运行时数据库、备份、凭证或私有资料。
+
 不要直接上传 GitHub 的整个源码 ZIP。技能包的顶层目录应为 `product-manager/`，其中直接包含 `SKILL.md` 与配套目录，见 [Claude 官方打包要求](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills)。
 
 ```text
-product-manager-v1.1.2.zip
+product-manager-v1.2.1.zip
 └─ product-manager/
    ├─ SKILL.md
    ├─ references/
@@ -194,7 +202,7 @@ product-manager-v1.1.2.zip
 
 WorkBuddy 的官方入口是 **技能 → 添加技能 → 上传技能**，导入后在 **已安装** 中管理启用状态，见 [WorkBuddy 官方技能说明](https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills-Market)（核对日期：2026-10-02）。
 
-1. 下载 [本仓库技能 ZIP](https://github.com/pylon12345/product-manager-os/releases/download/v1.1.2/product-manager-v1.1.2.zip)，保留完整包。
+1. 使用上节说明的 v1.2.1 技能 ZIP；没有对应发行附件时从主分支源码打包，保留完整目录。
 2. 在 WorkBuddy 打开技能页面，选择 **添加技能 → 上传技能**。
 3. 拖入 ZIP 或点击 **选择文件** 导入；若客户端提示格式错误，先核对其当前文件类型要求和上面的包结构。
 4. 在 **已安装** 中搜索 `product-manager`（显示名称也可能为 AI Product Manager OS），确认已启用。
@@ -215,7 +223,7 @@ WorkBuddy 的官方入口是 **技能 → 添加技能 → 上传技能**，导�
 
 其他宿主支持目录型 Skill 时，按其官方发现位置安装完整文件夹；不支持自动发现时，在项目指令中引用 `product-manager/SKILL.md`，要求按 Router 加载相应 reference 和 template。
 
-`agents/openai.yaml` 是 Codex 展示元数据，不是其他宿主的安装入口。本轮依据官方资料核对安装方式与包结构，尚未在 Claude 或 WorkBuddy 账号中完成实际导入和任务验收；工具、权限、语言理解与结果质量仍需在目标环境验证。
+`agents/openai.yaml` 是 Codex 展示元数据，不是其他宿主的安装入口。本说明沿用下列核对日期的官方资料与包结构，尚未在 Claude 或 WorkBuddy 账号中完成实际导入和任务验收；工具、权限、语言理解与结果质量仍需在目标环境验证。
 
 ## 9. 从旧版升级
 
@@ -225,7 +233,7 @@ WorkBuddy 的官方入口是 **技能 → 添加技能 → 上传技能**，导�
 4. 替换经过核验的完整目录；备份放在发现目录之外，避免重复加载。
 5. 新任务确认路径与版本，执行一个熟悉的任务；需要回退时恢复完整旧目录。
 
-v1.1.2 移除了可选网页知识库工具；已有知识库数据与周期同步任务的处理见 [UPGRADE_NOTES](UPGRADE_NOTES.md)。
+v1.2.1 恢复并保留可选知识库，继续沿用包外数据目录。升级不会同步、迁移或删除知识库，也不改变已有调度；曾停用的自动化需另行授权恢复。旧正向流程统一到 standard-flow，见 [UPGRADE_NOTES](UPGRADE_NOTES.md)。
 
 升级前先核对目标、备份和定制，再替换；不要静默覆盖已有安装。
 
@@ -235,6 +243,7 @@ v1.1.2 移除了可选网页知识库工具；已有知识库数据与周期同�
 
 ```bash
 python product-manager/validate.py
+python -m unittest discover -s product-manager/tests -p "test_*.py"
 python -m unittest discover -s product-manager/tests/behavior -p "test_*.py"
 python product-manager/tests/behavior/score.py --check
 ```
@@ -253,8 +262,8 @@ python product-manager/tests/behavior/score.py --check
 | 引用找不到 | 是否只复制入口，或丢失目录结构 |
 | Python 找不到 | 安装 Python 3.10+；系统命令为 python3 时替换命令名 |
 | 浏览或仓库访问被阻止 | 核对宿主权限，记录缺失证据，不编造结论 |
-| 旧版知识库周期任务报错 | 在宿主自动化中停用；v1.1.2 起不含同步脚本，卸载 Skill 不会自动取消调度 |
+| 旧版知识库周期任务报错 | 核对实际安装是否包含 scripts/pm_kb.py、白名单与数据目录权限；保留最后有效快照和备份，别清空数据库 |
 
 ## 12. 官方来源与适用日期
 
-新增 Claude、Claude Code 和 WorkBuddy 说明核对日期为 2026-10-02；Codex 说明沿用 2026-10-01 的已核对资料。入口随产品版本变化时，请以本节链接的官方资料与当前客户端为准。Skill 运行版本为 v1.1.2。
+新增 Claude、Claude Code 和 WorkBuddy 说明核对日期为 2026-10-02；Codex 说明沿用 2026-10-01 的已核对资料。入口随产品版本变化时，请以本节链接的官方资料与当前客户端为准。Skill 运行版本为 v1.2.1。

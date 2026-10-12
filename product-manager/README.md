@@ -1,4 +1,4 @@
-# AI Product Manager OS v1.1.2
+# AI Product Manager OS v1.2.1
 
 中文产品经理 Skill，面向 AI、Agent、SaaS、0→1 项目与已有产品改版。通过按需路由，将用户问题、证据判断、方案取舍、交付规格、AI 质量与成本、上线复盘组织成可重复的工作方式。
 
@@ -7,7 +7,7 @@
 ## 文档导航
 
 - [安装与升级](INSTALL.md)：Codex、Claude Code、Claude 网页／桌面端与 WorkBuddy 的安装、调用确认、升级和排错。
-- [详细使用说明](USER_GUIDE.md)：输入准备、24 个模式、常用指令与连续项目。
+- [详细使用说明](USER_GUIDE.md)：输入准备、26 个模式、常用指令与连续项目。
 - [电商 AI 客服演练](examples/ecommerce-customer-service.md)：从问题验证到 PRD、Eval 与上线决定。
 - [主入口](SKILL.md)：Agent 执行规则、路由和按需资源。
 - [版本记录](CHANGELOG.md) · [升级说明](UPGRADE_NOTES.md) · [方法来源](SOURCES.md)。
@@ -21,8 +21,10 @@
 | 已有产品 | 仓库反推、现实快照、跨角色交付、体验与验收 |
 | AI 产品 | 任务驱动架构、AI PRD、Eval、失败兜底、延迟与单位经济 |
 | 持续改进 | 上线门槛、监测、复盘、证据与历史决策复查 |
+| Skill 维护 | 坏例归因、候选改动、同夹具人工评分比较与维护者审批 |
+| 可选知识库 | 白名单同步、本地检索、快照差异、备份校验与恢复 |
 
-包内包含 24 个模式、23 个模板、8 个工作流与 100 个术语。只加载当前任务需要的文件，不把整个知识目录注入每轮上下文。
+包内包含 26 个模式、25 个模板、9 个工作流与 100 个术语。只加载当前任务需要的文件，不把整个知识目录注入每轮上下文。
 
 ## 第一次调用
 
@@ -54,12 +56,19 @@ $product-manager
 
 ```bash
 python validate.py
+python -m unittest discover -s tests -p "test_*.py"
 python -m unittest discover -s tests/behavior -p "test_*.py"
 python tests/behavior/score.py --check
 ```
 
 这些检查验证包结构、工具行为和测试材料。实际模型表现需按 [Behavior regression kit](tests/behavior/README.md)独立评估，不把工具测试当作业务验收。
 
-## v1.1.2
+## v1.2.1
 
-新增正向／反向标准流程；移除可选网页知识库工具；理顺工作流顺序与阶段定义，统一证据标签、能力状态和决策状态词表。升级不迁移、重抓或清空包外知识库，也不变更已有周期任务。许可见 [LICENSE](LICENSE)。
+整合主分支正向／反向标准流程、阶段定义和统一词表；保留可选知识库，新增快照差异查看与成本费率追溯，并加入受控的 Skill 自身迭代。升级不迁移、重抓或清空包外知识库，也不变更已有周期任务。许可见 [LICENSE](LICENSE)。
+
+## 可选知识库与自身迭代
+
+知识库仅在用户要求时使用，Python 标准库即可运行；指定包外绝对数据目录，按[Knowledge Base Ops](references/knowledge-base-ops.md)执行 `sync`、`status`、`search`、`changes`、`backup`、`verify-backup` 或显式恢复。只抓取白名单精确 URL，不跟随页面链接，不绕过站点限制；抓取成功不代表文章正文可用，缓存不代替实时一手核验。快照、备份、私有研究和项目记录不公开。
+
+改进 Skill 用 `improve-os` 和[改进工作流](workflows/skill-improvement-loop.md)：区分真实坏例与上下文或工具问题，提出最小修改，在同一冻结夹具上比较新旧原始回答及人工评分，再由维护者批准发布。9 个冻结案例只提供评测材料；本版完整新旧人工行为评测仍待完成。

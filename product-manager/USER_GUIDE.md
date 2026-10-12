@@ -1,6 +1,6 @@
 # Product Manager Skill｜详细使用说明
 
-适用版本：v1.1.2｜更新日期：2026-10-06。
+适用版本：v1.2.1｜更新日期：2026-10-12。
 
 [安装与升级](INSTALL.md) · [主入口](SKILL.md) · [电商 AI 客服演练](examples/ecommerce-customer-service.md) · [版本记录](CHANGELOG.md)
 
@@ -56,7 +56,7 @@ $product-manager
 请给带假设的比较、最小验证和进入自动回复的证据门槛。
 ```
 
-## 4. 24 个模式怎么选择
+## 4. 26 个模式怎么选择
 
 | 模式 | 适用问题 | 典型结果 |
 |---|---|---|
@@ -84,8 +84,10 @@ $product-manager
 | retro | 结果与原预测有何偏差 | 复盘、校准和下一决定 |
 | interview | 如何表达产品经历 | 案例结构与面试准备 |
 | glossary | 术语是什么意思 | 按需概念解释 |
+| knowledge-ops | 可选公开来源库怎么维护 | 同步、检索、差异、备份校验与显式恢复 |
+| improve-os | Skill 哪里需要改进 | 坏例归因、最小候选修改与新旧版人工复测 |
 
-一次通常一个主模式，确有依赖再加辅助模式。Agent 按需读取参考，不把 24 个模式同时运行。
+一次通常一个主模式，确有依赖再加辅助模式。Agent 按需读取参考，不把 26 个模式同时运行。
 
 ## 5. 常用指令，可以直接复制
 
@@ -249,6 +251,7 @@ $product-manager 延续这个项目。
 
 ```bash
 python validate.py
+python -m unittest discover -s tests -p "test_*.py"
 python -m unittest discover -s tests/behavior -p "test_*.py"
 python tests/behavior/score.py --check
 ```
@@ -256,8 +259,9 @@ python tests/behavior/score.py --check
 | 检查 | 含义 |
 |---|---|
 | validate.py | 文件、入口引用、术语与版本一致性 |
+| tests/test_pm_kb*.py | 知识库同步、搜索、差异、备份与恢复的离线回归 |
 | tests/behavior/test_score.py | 评分器的计算与输入检查 |
-| score.py --check | 8 个冻结任务与评分材料完整性 |
+| score.py --check | 9 个冻结任务与评分材料完整性 |
 
 以上命令不调用模型。实际测试：
 
@@ -269,6 +273,25 @@ python tests/behavior/score.py --check
 6. 用 `--score <评分表路径>` 汇总；高风险结论复核分歧。
 
 自动评分器只汇总人工评分，不能自行判断回答质量。通过一个案例不代表全部案例通过，也不保证任意模型或场景可靠。完整协议见 [Behavior regression kit](tests/behavior/README.md)。
+
+### 可选知识库
+
+仅在需要离线查找、来源追溯或备份时启用，不是产品任务的前置条件。从 Skill 根目录运行，把占位路径换成包外绝对路径：
+
+```text
+python scripts/pm_kb.py --data-dir "<知识库绝对路径>" --sources-file references/knowledge-sources.json sync
+python scripts/pm_kb.py --data-dir "<知识库绝对路径>" --sources-file references/knowledge-sources.json status
+python scripts/pm_kb.py --data-dir "<知识库绝对路径>" search "evaluation" --limit 10
+python scripts/pm_kb.py --data-dir "<知识库绝对路径>" changes --source openai-api-pricing
+python scripts/pm_kb.py --data-dir "<知识库绝对路径>" backup
+python scripts/pm_kb.py --data-dir "<知识库绝对路径>" verify-backup "<上一步返回的备份绝对路径>"
+```
+
+同步只访问白名单精确地址，遵守 robots.txt；个别来源失败仍备份并校验现有库。入口页不等于实质正文，页面变更不等于业务结论失效，需关联在用证据和决定。价格等事实仍查当前一手页面。周期运行需独立授权调度；不自动新增来源、删除历史备份或改写项目决策。限制及恢复操作见[知识库运维](references/knowledge-base-ops.md)。
+
+### 改进 Skill 自身
+
+调用 `improve-os` 时提供具体输入、实际输出与期望，先区分 Skill、模型、工具和上下文原因。私人材料不自动成为公开回归题。用同一冻结夹具保存新旧版本原始回答及人工评分，再运行 `score.py --compare`；该命令不运行模型，也不是发布许可。当前版本完整新旧人工行为评测仍待完成，协议见[自身迭代流程](workflows/skill-improvement-loop.md)。
 
 ## 9. 常见问题
 
