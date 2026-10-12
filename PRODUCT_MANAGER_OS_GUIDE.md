@@ -1,6 +1,6 @@
 # AI Product Manager OS｜正式版产品与运营指南
 
-> 版本：v1.2.0 · 文档日期：2026-09-28 · 适用对象：产品负责人、研究人员、设计与研发协作者、AI 产品运营者
+> 版本：v1.2.1 候选 · 文档日期：2026-10-12 · 适用对象：产品负责人、研究人员、设计与研发协作者、AI 产品运营者
 
 ## 1. 产品定位
 
@@ -44,7 +44,7 @@ AI Product Manager OS 是一个可安装到 Codex 等 Agent 环境的中文产�
 
 接手已有代码仓库时可先用 `reverse-decompose`：记录分支/提交和检查范围，从入口与代码证据重建用户任务、能力和模块依赖；把可能的目标用户、价值和业务规则明确标为推断。代码存在、测试通过、已部署和真实用户验收各是不同证据层级，不因反推而自动升级。
 
-产品阶段按 `IDEA → DISCOVERY → VALIDATION → MVP → BUILD → TEST → LAUNCH → MEASURE → ITERATE` 推进。这个序列是检查阶段门槛的工具，不是让每个小请求都走一遍流程。AI 方案优先从规则或传统代码、固定 Workflow 开始；只有必要时才升级到 LLM、RAG、工具调用、Agent 或 Fine-tuning，并说明增益、代价与回退路径。
+产品阶段按 `IDEA → DISCOVERY → VALIDATION → MVP → BUILD → TEST → LAUNCH → MEASURE → ITERATE` 推进，根据实际任务检查阶段门槛。AI 方案选择最简单且足够的基线；RAG、工具调用、Agent 与 Fine-tuning 按知识、外部操作、动态路径和行为适配等缺口选择或组合，并说明增益、代价与回退路径。例如工具调用不必先引入 RAG，检索问答也不必先采用 Agent。
 
 完整的跨次协议见 [Continuous Product Loop](product-manager/workflows/continuous-product-loop.md)；具体模式由 [Skill 入口](product-manager/SKILL.md) 路由。
 
@@ -101,6 +101,8 @@ python scripts/pm_kb.py --data-dir "<知识库绝对路径>" --sources-file refe
 
 ## 6. 证据、授权与安全原则
 
+v1.2.1 增加 `pm_kb.py ... changes --source <来源ID>`：只读比较最新两个有效快照，也可用快照 ID 固定历史范围。差异包含来源 URL、时间、哈希与截断标识。内容变化先关联已有证据或决定，再判断影响；新增模型或文章不自动使旧结论失效。行顺序相同集合也可能重新配对价格列，应查看上下文。成本计算明确记录型号、访问资格、处理档位、上下文区间、缓存类型、单位、币种和官方表格位置，保留旧假设及重算结果。无关联在用主张时，遵照用户的通知偏好保持安静。快照保存日期与最近成功检查日期分别解释。
+
 - **证据分级**：项目一手访谈、行为数据、客服与销售记录优先于通用方法文章。外部来源必须保留具体页面、观察日期、适用地区/产品版本和支持的主张；无法核验则标 `[待验证]`。
 - **判断状态**：模型建议不是团队承诺；计划指标不是已观测结果；自动测试不是用户验收。若新证据推翻旧结论，追加记录并标记旧记录 `SUPERSEDED`，不悄悄改写。
 - **权限最小化**：建议、审查和草拟不构成写文件、联系用户、改价、发布、删数据或操作生产系统的授权。项目记录默认只读；每次外部变更核对范围、负责人和回滚方案。
@@ -109,7 +111,7 @@ python scripts/pm_kb.py --data-dir "<知识库绝对路径>" --sources-file refe
 
 ## 7. 质量保证与适用结论
 
-该版本提供三层验证手段：`validate.py` 检查包结构；`tests/test_pm_kb.py` 与 `tests/behavior/test_score.py` 检查工具行为；`tests/behavior/` 的 9 个冻结任务与人工评分规则用于观察实际 Agent 回答。行为评估应在隔离的新任务中保留原始回答，记录 Skill 版本、模型、日期和工具限制，再由评审按可观察标准评分。运行 `score.py --check` 仅检查案例与规则文件，**不会自动证明 Skill 的回答质量**。`score.py --compare` 仅比较同夹具、同模型的完整人工评分和回归，不替代真实任务验收或发布批准。测试协议见 [Behavior regression kit](product-manager/tests/behavior/README.md)。
+该版本提供三层验证手段：`validate.py` 检查包结构；`tests/test_pm_kb.py`、`tests/test_pm_kb_changes.py` 与 `tests/behavior/test_score.py` 检查工具行为；`tests/behavior/` 的 9 个冻结任务与人工评分规则用于观察实际 Agent 回答。行为评估应在隔离的新任务中保留原始回答，记录 Skill 版本、模型、日期和工具限制，再由评审按可观察标准评分。运行 `score.py --check` 仅检查案例与规则文件，**不会自动证明 Skill 的回答质量**。`score.py --compare` 仅比较同夹具、同模型标识的完整人工评分和回归，运行条件仍由人核对。测试协议见 [Behavior regression kit](product-manager/tests/behavior/README.md)。
 
 Skill 本身的迭代按 [Skill Improvement Loop](product-manager/workflows/skill-improvement-loop.md) 运行：真实坏例先登记来源、权限、期望与实际，再区分 Skill 缺陷、模型/工具波动、上下文缺失和外部执行；候选修改须有最小可观察验收目标。旧版和候选版在同一冻结案例上分别运行，保留原始回答并人工评分；新增案例时两版都重测新版夹具，并保留旧夹具与结果。高风险分歧由第二评审人复核。维护者检查关键项、普通回归、隐私许可、版本文档和回滚方案，再对具体提交做人工批准。没有批准时不自动改安装、推送或发布；发布后仍须观察失误是否复发。私有客户材料、原始回答、评分历史与审批记录默认在包外受控目录，公开回归题仅采用已审查的脱敏或合成内容。
 
@@ -119,7 +121,7 @@ Skill 本身的迭代按 [Skill Improvement Loop](product-manager/workflows/skil
 
 ## 8. 维护与版本治理
 
-当前发行版本为 **v1.2.0**；v1.0.0 是首个正式版，先前 2.x 是开发迭代编号。此次新增 Skill 自身改进闭环，**不迁移、清空或重抓包外知识库**，也不改变每周同步计划。后续变更应同时更新 `manifest.yaml`、`SKILL.md`、`README.md`、`CHANGELOG.md` 和必要的测试。保留冻结行为案例以比较新旧版本；若修改评分规则，需说明原因并保留可追溯的旧结果。升级前比较现有安装和自定义内容，避免覆盖用户数据。
+当前候选版本为 **v1.2.1**，整合本机 v1.1.1 修复与 v1.2 的自身改进闭环，新增快照差异查看和成本证据追溯。v1.0.0 是首个正式版，先前 2.x 是开发迭代编号。包外知识库无需迁移；每周同步计划保持原配置。后续变更应同时更新 `manifest.yaml`、`SKILL.md`、`README.md`、`CHANGELOG.md` 和必要的测试。保留冻结行为案例以比较新旧版本；若修改评分规则，需说明原因并保留可追溯的旧结果。升级前比较现有安装和自定义内容，避免覆盖用户数据。
 
 知识来源需要维护，但不是“越多越好”：只增加与当前决策相关、可核验、允许抓取的具体页面；记录来源失效、变更与时效风险。业务证据则由项目负责人按权限独立维护，遵循 `PROPOSED → COMMITTED → REVISITED` 的决策闭环。维护目标是减少错误决策和无效工作，而不是增加模板数量或自动化次数。
 

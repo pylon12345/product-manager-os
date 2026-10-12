@@ -1,8 +1,8 @@
-# AI Product Manager OS v1.2.0
+# AI Product Manager OS v1.2.1
 
 一个面向 **AI 产品经理、AI Agent、SaaS 和 0→1 开发** 的中文产品经理 Skill。
 
-v1.2.0 加入 Skill 自身的受控改进闭环：真实坏例 → 归因 → 候选修改 → 同一夹具的新旧版人工评测 → 维护者批准 → 发布后观察。已有项目反推拆解等 v1.1 能力保持不变。它可在 Codex、Claude Code、Cursor、Windsurf 或其他 Agent 工作流中复用；升级不会迁移或重抓包外知识库，也不会改变已配置的每周自动化。
+v1.2.1 是待审核候选版，整合 v1.1.1 的内容有效性和路由修复，以及 v1.2 的 Skill 自身改进闭环；新增快照差异查看、在用判断关联与成本费率依据。它可在 Codex、Claude Code、Cursor、Windsurf 或其他 Agent 工作流中复用。已有项目和包外知识库无需迁移；候选版审核通过并安装后，新工具才会进入实际工作流。
 
 ## 正式版核心能力
 
@@ -12,7 +12,7 @@ v1.2.0 加入 Skill 自身的受控改进闭环：真实坏例 → 归因 → �
 - **Critical Review / PM Slop Test**：AI 不再只会顺着需求写文档。
 - **Decision Log**：记录为什么做、接受了什么代价、什么时候重新评估。
 - 完整生命周期：`IDEA → DISCOVERY → VALIDATION → MVP → BUILD → TEST → LAUNCH → MEASURE → ITERATE`。
-- AI 架构采用阶梯式判断：规则 → Workflow → LLM → RAG → Tools/MCP → Agent → Fine-tune。
+- AI 架构选择最简单且足够的基线，按任务缺口选择或组合 RAG、Tools、Agent 与 Fine-tuning。
 - AI PRD 单独建模：Eval、Golden Set、Guardrails、Failure Modes、HITL、成本、延迟、上线门槛。
 - 100 个术语移到按需加载知识层，不再浪费每次调用的上下文。
 - Decision Contract 把每个复杂任务绑定到决定、Owner、证据门槛与 Revisit/Kill 条件。
@@ -117,6 +117,7 @@ product-manager/
 │  └─ pm_kb.py
 ├─ tests/
 │  ├─ test_pm_kb.py
+│  ├─ test_pm_kb_changes.py
 │  └─ behavior/
 │     ├─ cases.json
 │     ├─ rubric.json
@@ -187,12 +188,15 @@ product-manager/
 
 ## 本地知识库：同步、检索和备份
 
+v1.2.1 的 `changes` 可只读查看同一来源的新旧快照，输出快照 ID、URL、时间、哈希、带上下文的差异及截断标识。行顺序变化也可能改变价格对应关系，因此工具仅报告差异，不替用户判断业务影响。通知前需在当前项目已有证据或决策中找到相关主张；无关联时按用户通知偏好处理。HTTP 200 的已知访问拦截/登录页会被拒收，保留上一份有效内容。
+
 从 Skill 根目录运行以下命令，把示例绝对路径换成你自己的**包外数据目录**。工具不会把数据库写进 Skill 安装包，也不需要第三方依赖。
 
 ```powershell
 python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" --sources-file references/knowledge-sources.json sync
 python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" --sources-file references/knowledge-sources.json search "evaluation" --limit 10
 python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" --sources-file references/knowledge-sources.json status
+python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" changes --source openai-api-pricing --max-lines 120
 python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" --sources-file references/knowledge-sources.json backup
 ```
 
@@ -241,6 +245,8 @@ python scripts/pm_kb.py --data-dir "C:\path\to\product\knowledge-base" --sources
 把整个目录作为一个 Skill 目录安装，入口保持为 `SKILL.md`。不同 Agent 的发现目录不同，因此本包不把运行时路径写死；核心原则是：**入口文件可见，且 `references/`、`templates/`、`knowledge/` 保持相对路径不变。**
 
 ## 使用原则
+
+一般中文产品任务由本 Skill 负责；需要 PLG 增长、定位、财务或职业专项知识时，可按需读取可用的 `product-manager-skills` 对应模块，用户显式选择优先。Foundations、Frameworks 与 AI Product Craft 均有按需入口；术语统一维护 glossary，terms 留作兼容。
 
 - 想法阶段先 `assess` / `discover`，不要直接 `prd`。
 - 重大开发前先建立 `.pmcontext.md`。

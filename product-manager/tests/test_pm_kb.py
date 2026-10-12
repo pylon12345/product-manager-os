@@ -224,6 +224,73 @@ class KnowledgeBaseTests(unittest.TestCase):
                 status_code = pm_kb.main(["--data-dir", str(self.data_dir), "status"])
             self.assertEqual(status_code, 0)
 
+    def test_http_200_gate_pages_preserve_last_good_snapshot(self):
+        pm_kb.sync_sources(self.data_dir, self.config, fetcher=FakeFetcher())
+        initial = pm_kb.status_report(self.data_dir)["sources"][0]
+        variants = (
+            "<title>Access Denied</title><h1>Verify you are human</h1>",
+            "<title>Just a moment...</title>",
+            "<title>Attention Required! | Cloudflare</title>",
+            "<h1>访问被拒绝</h1>",
+            "<h1>人机验证</h1>",
+            "<title>Sign in to Example</title>",
+            "<title>Sign In</title><form><input type='password'></form>",
+        )
+        for markup in variants:
+            with self.subTest(markup=markup):
+                body = ("<html>" + markup + "<main><p>" +
+                        "Complete verification to access this website. " * 8 +
+                        "</p></main></html>").encode("utf-8")
+                report = pm_kb.sync_sources(self.data_dir, self.config,
+                                            fetcher=FakeFetcher(body))
+                self.assertEqual(report["status"], "partial_failure")
+                self.assertEqual(report["results"][0]["status"], "error")
+                status = pm_kb.status_report(self.data_dir)
+                self.assertEqual(status["snapshots"], 1)
+                self.assertEqual(status["sources"][0]["latest_snapshot_id"],
+                                 initial["latest_snapshot_id"])
+                self.assertEqual(status["sources"][0]["last_status"], "error")
+                self.assertEqual(pm_kb.search_db(self.data_dir, "Alpha feature", limit=5)["count"], 1)
+
+        unchanged = FakeFetcher(status=304)
+        report = pm_kb.sync_sources(self.data_dir, self.config, fetcher=unchanged)
+        self.assertEqual(report["failed"], 0)
+        self.assertEqual(unchanged.calls[-1][2], '"abc"')
+        self.assertEqual(report["results"][0]["snapshot_id"], initial["latest_snapshot_id"])
+
+    def test_first_gate_page_does_not_create_a_snapshot(self):
+        body = ("<html><title>Access Denied</title><main><p>" +
+                "This request has been blocked. " * 8 + "</p></main></html>").encode()
+        report = pm_kb.sync_sources(self.data_dir, self.config,
+                                    fetcher=FakeFetcher(body))
+        self.assertEqual(report["failed"], 1)
+        status = pm_kb.status_report(self.data_dir)
+        self.assertEqual(status["snapshots"], 0)
+        self.assertIsNone(status["sources"][0]["latest_snapshot_id"])
+
+    def test_gate_terms_in_documentation_are_not_rejected(self):
+        for title in ("Troubleshooting Access Denied", "Access Denied troubleshooting"):
+            with self.subTest(title=title):
+                body = ("<html><title>" + title + "</title><main>" +
+                        "<h1>Authentication troubleshooting guide</h1><p>" +
+                        "Access denied and verify you are human are error messages. " * 8 +
+                        "</p><form><input type='password'></form></main></html>").encode()
+                report = pm_kb.sync_sources(self.data_dir, self.config,
+                                            fetcher=FakeFetcher(body))
+                self.assertEqual(report["failed"], 0)
+                self.assertEqual(pm_kb.search_db(self.data_dir, "error messages", limit=5)["count"], 1)
+
+    def test_titleless_article_and_plain_text_remain_supported(self):
+        title, text = pm_kb.extract_text(
+            HTML_A.replace(b"<title>PM Example</title>", b""),
+            "text/html", "Access Denied")
+        self.assertEqual(title, "Access Denied", "allowlist titles are not page messages")
+        self.assertIn("Alpha feature", text)
+        _, text = pm_kb.extract_text(
+            b"Documentation mentions access denied as an error. " * 8,
+            "text/plain", "Public docs")
+        self.assertIn("Documentation", text)
+
     def test_backup_verify_restore_and_pre_restore_safety_backup(self):
         pm_kb.sync_sources(self.data_dir, self.config, fetcher=FakeFetcher())
         original = pm_kb.create_backup(self.data_dir)

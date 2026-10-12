@@ -14,5 +14,6 @@
 - Recheck trigger: 何时或什么变化会使它需要重查
 - Conflicts with / superseded by: 相关证据 ID；无则填 none
 - Used by decision: 决策 ID；尚未用于决策可填 none
+- Optional KB provenance: 来源 ID / 快照 ID / 内容哈希；引用缓存时填写。快照保存日期与最近成功核验日期分别记录
 
 示例中的占位值不可当成实际证据。材料若含个人资料或商业秘密，只保存最小定位信息与脱敏摘要；不要复制完整访谈、日志或受限内容。仅在项目记录的写入已获授权时保存，否则把所需条目作为回复草稿。

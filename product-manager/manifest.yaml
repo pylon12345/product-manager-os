@@ -1,5 +1,5 @@
 name: product-manager
-version: 1.2.0
+version: 1.2.1
 display_name: AI Product Manager OS
 language: zh-CN
 focus:
@@ -16,7 +16,7 @@ core_mechanisms:
   - critical_review
   - decision_log
   - lifecycle_router
-  - ai_architecture_ladder
+  - ai_architecture_selection
   - ai_evaluation
   - pm_slop_test
   - decision_contract
@@ -38,6 +38,7 @@ core_mechanisms:
   - controlled_skill_improvement
   - badcase_triage
   - paired_behavior_comparison
+  - knowledge_snapshot_comparison
 modes:
   - teach
   - assess

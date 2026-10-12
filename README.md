@@ -1,6 +1,6 @@
 # AI Product Manager OS
 
-AI Product Manager OS v1.2.0 的开源仓库，包含 Product Manager Skill 源码、模板、工作流、测试与专业指南。此版新增 Skill 自身的受控改进闭环：坏例登记、归因、候选修改、新旧版人工评测比较及人工发布门禁。示例案例已匿名化；运行时网页快照、知识库备份、客户资料、项目私有记录和本机配置不在仓库中。
+AI Product Manager OS v1.2.1 候选版的开源仓库，包含 Product Manager Skill 源码、模板、工作流、测试与专业指南。此版整合本机 v1.1.1 修复与 v1.2 的 Skill 改进闭环，增加本地快照差异查看、变化与决策关联以及成本费率溯源。示例案例已匿名化；运行时网页快照、知识库备份、客户资料、项目私有记录和本机配置不在仓库中。
 
 - [产品与运营指南](PRODUCT_MANAGER_OS_GUIDE.md)
 - [Skill 入口](product-manager/SKILL.md)

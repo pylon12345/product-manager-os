@@ -8,10 +8,13 @@ with an explicit data directory and a reviewed source allowlist.
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 from contextlib import closing, contextmanager
+import difflib
 import hashlib
 from html.parser import HTMLParser
 import ipaddress
+from itertools import islice
 import json
 import os
 from pathlib import Path
@@ -498,6 +501,25 @@ BLOCK_TAGS = {
 }
 SKIP_TAGS = {"script", "style", "noscript", "nav", "header", "footer", "aside", "form", "svg"}
 
+# Match page-level messages, not mentions inside otherwise useful articles.
+INTERSTITIAL_MESSAGE = re.compile(
+    r"^(?:access denied|request (?:blocked|rejected)|403(?: forbidden)?|forbidden|"
+    r"service unavailable|just a moment|attention required|"
+    r"(?:please )?verify (?:that )?you are (?:a )?human|"
+    r"checking your browser|security (?:check|verification)|robot check|"
+    r"are you a robot\??|authentication required|"
+    r"sign in to .+|log in to .+|"
+    r"访问被拒绝|拒绝访问|访问受限|请求被拦截|安全验证|人机验证|"
+    r"(?:请|请先|需要)登录|验证您是人类)"
+    r"(?:\s*[:|!.…\-–—].*)?$",
+    re.IGNORECASE,
+)
+LOGIN_MESSAGE = re.compile(
+    r"^(?:sign in|log in|login|登录|用户登录|账户登录|账号登录)"
+    r"(?:\s*[:|!.…\-–—].*)?$",
+    re.IGNORECASE,
+)
+
 
 class ReadableText(HTMLParser):
     def __init__(self) -> None:
@@ -505,11 +527,23 @@ class ReadableText(HTMLParser):
         self.skip_depth = 0
         self.main_depth = 0
         self.title_depth = 0
+        self.heading_depth = 0
+        self.heading_seen = False
+        self.has_password_input = False
         self.all_parts: list[str] = []
         self.main_parts: list[str] = []
         self.title_parts: list[str] = []
+        self.heading_parts: list[str] = []
 
     def handle_starttag(self, tag: str, attrs) -> None:  # noqa: ANN001
+        if tag == "input" and any(
+            key.lower() == "type" and (value or "").lower() == "password"
+            for key, value in attrs
+        ):
+            self.has_password_input = True
+        if tag == "h1" and not self.heading_seen and not self.skip_depth:
+            self.heading_seen = True
+            self.heading_depth = 1
         if tag in SKIP_TAGS:
             self.skip_depth += 1
         if tag in ("main", "article"):
@@ -522,6 +556,8 @@ class ReadableText(HTMLParser):
                 self.main_parts.append("\n")
 
     def handle_endtag(self, tag: str) -> None:
+        if tag == "h1":
+            self.heading_depth = 0
         if tag in BLOCK_TAGS and not self.skip_depth:
             self.all_parts.append("\n")
             if self.main_depth:
@@ -538,6 +574,8 @@ class ReadableText(HTMLParser):
             self.title_parts.append(data)
         if self.skip_depth:
             return
+        if self.heading_depth:
+            self.heading_parts.append(data)
         if data.strip():
             self.all_parts.append(data)
             if self.main_depth:
@@ -547,6 +585,21 @@ class ReadableText(HTMLParser):
 def normalize_text(parts: list[str]) -> str:
     lines = [re.sub(r"\s+", " ", line).strip() for line in " ".join(parts).splitlines()]
     return "\n".join(line for line in lines if line)[:MAX_TEXT_CHARS]
+
+
+def reject_interstitial(reader: ReadableText) -> None:
+    """Fail closed on known gate pages; never scan article body for keywords."""
+    messages = (
+        " ".join(" ".join(reader.title_parts).split()),
+        " ".join(" ".join(reader.heading_parts).split()),
+    )
+    password_gate = reader.has_password_input and any(
+        LOGIN_MESSAGE.fullmatch(message) for message in messages if message
+    )
+    if password_gate or any(
+        INTERSTITIAL_MESSAGE.fullmatch(message) for message in messages if message
+    ):
+        raise KBError("page is an access, verification, or login gate; no snapshot saved")
 
 
 def extract_text(body: bytes, content_type: str, fallback_title: str) -> tuple[str, str]:
@@ -565,6 +618,7 @@ def extract_text(body: bytes, content_type: str, fallback_title: str) -> tuple[s
     else:
         reader = ReadableText()
         reader.feed(decoded)
+        reject_interstitial(reader)
         main_text = normalize_text(reader.main_parts)
         text = main_text if len(main_text) >= MIN_TEXT_CHARS else normalize_text(reader.all_parts)
         title = " ".join(reader.title_parts).strip() or fallback_title
@@ -769,6 +823,79 @@ def search_db(data_dir: Path, query: str, *, limit: int) -> dict[str, object]:
     return {"query": query, "count": len(matches), "results": matches}
 
 
+def snapshot_changes(data_dir: Path, source_id: str, *, from_snapshot: int | None = None,
+                     to_snapshot: int | None = None, max_lines: int = 120) -> dict[str, object]:
+    """Compare stored evidence only; line reordering does not imply semantic equivalence."""
+    if not 1 <= max_lines <= 1000:
+        raise KBError("--max-lines must be between 1 and 1000")
+    for value in (from_snapshot, to_snapshot):
+        if value is not None and value < 1:
+            raise KBError("snapshot IDs must be positive")
+    with closing(connect_db(data_dir / DB_NAME)) as conn:
+        conn.execute("BEGIN")
+        source = conn.execute(
+            "SELECT id,enabled,url,last_checked_at,last_status,last_error,latest_snapshot_id "
+            "FROM sources WHERE id=?", (source_id,),
+        ).fetchone()
+        if source is None:
+            raise KBError("unknown source id")
+
+        def get_snapshot(snapshot_id):
+            row = conn.execute(
+                "SELECT id,source_id,fetched_at,url,title,content_text,content_sha256 "
+                "FROM snapshots WHERE id=? AND source_id=?", (snapshot_id, source_id),
+            ).fetchone()
+            if row is None:
+                raise KBError("snapshot not found for this source")
+            if hashlib.sha256(row["content_text"].encode("utf-8")).hexdigest() != row["content_sha256"]:
+                raise KBError("snapshot content hash mismatch")
+            return dict(row)
+
+        target_id = to_snapshot if to_snapshot is not None else source["latest_snapshot_id"]
+        if target_id is None:
+            raise KBError("source has no usable snapshot")
+        current = get_snapshot(target_id)
+        if from_snapshot is None:
+            previous = conn.execute(
+                "SELECT id FROM snapshots WHERE source_id=? AND id<? ORDER BY id DESC LIMIT 1",
+                (source_id, target_id),
+            ).fetchone()
+            from_snapshot = previous[0] if previous else None
+        if from_snapshot is not None and from_snapshot >= target_id:
+            raise KBError("baseline snapshot must precede target snapshot")
+        baseline = get_snapshot(from_snapshot) if from_snapshot is not None else None
+
+    def metadata(row):
+        return {k: v for k, v in row.items() if k != "content_text"} if row else None
+
+    report = {
+        "status": "ok", "source": dict(source), "baseline": metadata(baseline),
+        "current": metadata(current), "impact": "not_assessed",
+        "source_url_changed": baseline is not None and baseline["url"] != current["url"],
+        "diff": [], "diff_truncated": False, "line_text_truncated": False,
+    }
+    if baseline is None:
+        report["change_type"] = "initial_snapshot"
+        return report
+    old_text, new_text = baseline["content_text"], current["content_text"]
+    old_lines, new_lines = old_text.splitlines(), new_text.splitlines()
+    if old_text == new_text:
+        report["change_type"] = "identical"
+    elif Counter(old_lines) == Counter(new_lines):
+        report["change_type"] = "line_order_changed"
+    else:
+        report["change_type"] = "content_changed"
+    diff = list(islice(difflib.unified_diff(
+        old_lines, new_lines, fromfile=f"snapshot-{baseline['id']}",
+        tofile=f"snapshot-{current['id']}", n=3, lineterm="",
+    ), max_lines + 1))
+    report["diff_truncated"] = len(diff) > max_lines
+    visible = diff[:max_lines]
+    report["line_text_truncated"] = any(len(line) > 500 for line in visible)
+    report["diff"] = [line if len(line) <= 500 else line[:500] + " [truncated]" for line in visible]
+    return report
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-dir", required=True, help="explicit absolute local KB directory")
@@ -780,6 +907,11 @@ def build_parser() -> argparse.ArgumentParser:
     search.add_argument("query")
     search.add_argument("--limit", type=int, default=10)
     commands.add_parser("status", help="show local source and snapshot status")
+    changes = commands.add_parser("changes", help="compare stored snapshots without network or writes")
+    changes.add_argument("--source", required=True, help="existing source id")
+    changes.add_argument("--from-snapshot", type=int, help="baseline ID; default previous snapshot")
+    changes.add_argument("--to-snapshot", type=int, help="target ID; default latest usable snapshot")
+    changes.add_argument("--max-lines", type=int, default=120, help="diff output cap, 1-1000 lines")
     commands.add_parser("backup", help="create and verify timestamped SQLite backup")
     verify = commands.add_parser("verify-backup", help="verify backup integrity and hashes")
     verify.add_argument("backup_file", type=Path)
@@ -804,6 +936,9 @@ def main(argv: list[str] | None = None) -> int:
             emit(search_db(data_dir, args.query, limit=args.limit))
         elif args.command == "status":
             emit(status_report(data_dir))
+        elif args.command == "changes":
+            emit(snapshot_changes(data_dir, args.source, from_snapshot=args.from_snapshot,
+                                  to_snapshot=args.to_snapshot, max_lines=args.max_lines))
         elif args.command == "backup":
             with mutation_lock(data_dir):
                 path = create_backup(data_dir)

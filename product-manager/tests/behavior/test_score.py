@@ -72,7 +72,8 @@ class ScoreRunTests(unittest.TestCase):
             self.run_score()
 
     def test_skeleton_uses_current_skill_version(self):
-        self.assertEqual(self.ratings["run"]["skill_version"], "1.2.0")
+        with patch("score.current_skill_version", return_value="9.8.7"):
+            self.assertEqual(skeleton(self.cases, self.rubric)["run"]["skill_version"], "9.8.7")
 
     def test_compare_complete_matching_runs_pass(self):
         baseline_path, candidate_path, baseline, candidate = self.prepare_compare()

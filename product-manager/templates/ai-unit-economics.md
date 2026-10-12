@@ -5,6 +5,14 @@
 - Segment / Plan:
 - Quality / Latency / Safety guardrails:
 
+## Rate Evidence
+- Provider / Exact model ID or version / Access eligibility:
+- Processing tier / Context range / Input, cache read, cache write, output or other billing category:
+- Billing unit / Currency / Region and surcharges / Verified at:
+- Official source and table row/column; optional source ID, snapshot ID and hash:
+- Historical or unverified fields / Sensitivity range:
+- Changed field / Prior assumption / Linked decision / Recalculation and effect:
+
 ## Cost Stack
 | Driver | Unit | p50 | p95 | Unit price | Cost / successful task | Owner |
 |---|---|---:|---:|---:|---:|---|

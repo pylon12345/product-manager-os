@@ -4,6 +4,7 @@ import re, sys, json
 root=Path(__file__).parent
 required=['SKILL.md','README.md','manifest.yaml','agents/openai.yaml','knowledge/glossary.md','knowledge/glossary.json','references/decision-contract.md','references/project-reality.md','references/mode-reverse-decompose.md','references/mode-improve-os.md','references/mode-delivery-os.md','references/living-sources.md','references/knowledge-base-ops.md','references/knowledge-sources.json','references/operating-loop.md','scripts/pm_kb.py','tests/test_pm_kb.py','workflows/continuous-product-loop.md','workflows/skill-improvement-loop.md','templates/project-reverse-map.md','templates/skill-badcase.md','templates/skill-change-proposal.md','templates/system-reality-map.md','templates/role-task-permission-map.md','templates/cross-surface-acceptance.md','templates/evidence-ledger.md','templates/eval-spec.md','tests/behavior/cases.json','tests/behavior/rubric.json','tests/behavior/score.py','tests/behavior/test_score.py','tests/behavior/README.md']
 errors=[]
+required.append('tests/test_pm_kb_changes.py')
 for f in required:
     if not (root/f).exists(): errors.append(f'missing: {f}')
 skill=(root/'SKILL.md').read_text(encoding='utf-8')
@@ -40,7 +41,18 @@ except Exception as e: errors.append(f'knowledge source registry invalid: {e}')
 if errors:
     print('\n'.join(errors)); sys.exit(1)
 manifest=(root/'manifest.yaml').read_text(encoding='utf-8')
-if not re.search(r'(?m)^version:\s*1\.2\.0\s*$', manifest): errors.append('manifest version is not 1.2.0')
+version_match = re.search(r'(?m)^version:\s*(\d+\.\d+\.\d+)\s*$', manifest)
+if version_match is None:
+    errors.append('manifest version is not a valid release version')
+else:
+    version = version_match.group(1)
+    if f'# Product Manager Skill v{version}' not in skill.splitlines():
+        errors.append('SKILL.md version differs from manifest')
+    readme = (root/'README.md').read_text(encoding='utf-8')
+    if f'# AI Product Manager OS v{version}' not in readme.splitlines():
+        errors.append('README.md version differs from manifest')
+    if not re.search(r'(?m)^## ' + re.escape(version) + r'\b', (root/'CHANGELOG.md').read_text(encoding='utf-8')):
+        errors.append('CHANGELOG.md missing current version')
 if not re.search(r'(?m)^\s*- reverse-decompose\s*$', manifest): errors.append('manifest missing reverse-decompose mode')
 if not re.search(r'(?m)^\s*- improve-os\s*$', manifest): errors.append('manifest missing improve-os mode')
 expected_refs={'mode-competitive-intelligence.md','mode-research-ops.md','mode-pricing.md','mode-ai-economics.md','mode-experience.md','mode-reverse-decompose.md'}
